@@ -9,7 +9,8 @@
   padding: 32px 24px 24px;
   border: 6px double #8b754f;
   border-radius: 20px;
-  background: linear-gradient(to bottom, #f6efe6 0%, #f9f4ed 100%);
+  background-color: #eddfce;
+  
   color: #5a4030;
 }
 
@@ -53,12 +54,13 @@
   max-width: 1050px;
   margin-left: auto;
   margin-right: auto;
-  
 }
+
 /* za reverse red obrni i širine kolona */
 .famous-book-row.reverse {
   grid-template-columns: minmax(420px, 1fr) minmax(260px, 320px);
 }
+
 .famous-book-row.reverse .famous-book-side {
   order: 2;
 }
@@ -90,14 +92,14 @@
   transform: rotateY(-10deg) rotateX(3deg);
   transform-origin: left center;
   box-shadow:
-    12px 14px 28px rgba(0, 0, 0, 0.30),
+    12px 14px 28px rgba(0, 0, 0, 0.22),
     2px 2px 0px #d6c3a5;
   transition: transform 0.4s ease, box-shadow 0.4s ease;
 }
 
 .famous-book-card:hover .famous-book-cover {
   transform: rotateY(0deg) rotateX(0deg) scale(1.03);
-  box-shadow: 18px 20px 38px rgba(0, 0, 0, 0.45);
+  box-shadow: 18px 20px 38px rgba(0, 0, 0, 0.28);
 }
 
 .famous-book-content {

@@ -3,6 +3,7 @@ import { useState } from 'react'
 import Header from './components/Header';
 import HeroSection from './components/HeroSection';
 import RecommendedBooks from './components/RecommendedBooks';
+import AuthorList from './components/AuthorList';
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
         <HeroSection/>
       </header>
       <RecommendedBooks/>
+      <AuthorList/>
     </div>
   );
 }

@@ -1,7 +1,7 @@
 import "./HeroSection.css";
 import heroBooks from "../assets/hero-books.jpg";
 
-function HeroSection() {
+const HeroSection = () => {
   return (
     <section
       className="hero-section"
@@ -27,6 +27,6 @@ function HeroSection() {
       </div>
     </section>
   );
-}
+};
 
 export default HeroSection;

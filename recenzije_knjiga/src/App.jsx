@@ -6,9 +6,11 @@ import HeroSection from './components/HeroSection';
 import RecommendedBooks from './components/RecommendedBooks';
 import FamousBooks from './components/FamousBooks';
 import AuthorList from './components/AuthorList';
-
+import Home from './pages/Home';
+import Footer from './components/Footer';
 function App() {
   return (
+    <>
     <Router>
       <div className='App'>
         <header id='header'>
@@ -16,18 +18,14 @@ function App() {
         </header>
 
         <Routes>
-          <Route path="/" element={
-            <>
-              <HeroSection />
-              <RecommendedBooks />
-              <FamousBooks />
-            </>
-          } />
+          <Route path="/" element={<Home/>}
+          />
 
           <Route path="/authors" element={<AuthorList />} />
         </Routes>
       </div>
     </Router>
+    <footer id='footer'><Footer /></footer></>
   );
 }
 

@@ -10,7 +10,9 @@ function Navbar() {
         </div>
 
         <div className="nav-center">
+          <Link to="/">
           <button className="nav-btn">Каталог</button>
+          </Link>
           <Link to="/authors">
             <button className="nav-btn">Аутори</button>
           </Link>

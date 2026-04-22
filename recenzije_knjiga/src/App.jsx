@@ -13,6 +13,8 @@ import BookDetails from './pages/BookDetails';
 import ScrollToTop from "./components/ScrollToTop";
 import HeroAuthors from "./components/HeroAuthors";
 import AuthorDetails from './components/AuthorDetails';
+import AdminBooks from './pages/AdminBooks';
+
 function App() {
   return (
     <>
@@ -23,17 +25,14 @@ function App() {
           <Header />
         </header>
 
-      <Routes>
-        <Route path="/" element={<Home/>} />
-
-        <Route path="/authors" element={<AuthorList />} />
-        
-        <Route path="/author/:id" element={<AuthorDetails />} />
-
-        <Route path="/books" element={<AllBooks />} />
-        
-        <Route path="/book/:id" element={<BookDetails />} />
-      </Routes>
+        <Routes>
+          <Route path="/" element={<Home/>} />
+          <Route path="/authors" element={<AuthorList />} />
+          <Route path="/author/:id" element={<AuthorDetails />} />
+          <Route path="/books" element={<AllBooks />} />
+          <Route path="/book/:id" element={<BookDetails />} />
+          <Route path="/admin" element={<AdminBooks />} />
+        </Routes>
       </div>
     </Router>
     <footer id='footer'><Footer /></footer></>

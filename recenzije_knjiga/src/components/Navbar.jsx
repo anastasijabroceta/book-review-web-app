@@ -19,7 +19,9 @@ function Navbar() {
           <Link to="/books">
           <button className="nav-btn">Рецензије</button>
           </Link>
-          <button className="nav-btn">О нама</button>
+          <Link to="/admin">
+          <button className="nav-btn">Администратор</button>
+          </Link>
         </div>
 
         <div className="nav-right">

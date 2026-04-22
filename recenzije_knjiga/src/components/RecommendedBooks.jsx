@@ -2,7 +2,7 @@ import "./RecommendedBooks.css";
 import ScrollReveal from "./ScrollReveal";
 
 import bookOne from "../assets/book-one.jpg";
-import bookTwo from "../assets/book-two.jpg";
+import VelelepotaSekunde from "../assets/velelepota_sekunde.jpg";
 import bookThree from "../assets/book-three.jpg";
 
 function RecommendedBooks() {
@@ -24,6 +24,7 @@ function RecommendedBooks() {
           </p>
 
           <div className="highlights-actions">
+        
             <button className="highlights-btn primary-btn">
               Погледај препоруке
             </button>
@@ -50,7 +51,7 @@ function RecommendedBooks() {
           </ScrollReveal>
 
           <ScrollReveal className="floating-card mini-book-card" delay={340}>
-            <img src={bookTwo} alt="Књига" className="mini-book-image" />
+            <img src={VelelepotaSekunde} alt="Књига" className="mini-book-image" />
             <div>
               <p className="mini-card-label">Истакнути наслов</p>
               <h4>Велелепота секунде</h4>

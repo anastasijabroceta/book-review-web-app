@@ -8,6 +8,7 @@ import FamousBooks from './components/FamousBooks';
 import AuthorList from './components/AuthorList';
 import Home from './pages/Home';
 import Footer from './components/Footer';
+import AllBooks from './pages/AllBooks';
 function App() {
   return (
     <>
@@ -22,6 +23,7 @@ function App() {
           />
 
           <Route path="/authors" element={<AuthorList />} />
+          <Route path="/books" element={<AllBooks />} />
         </Routes>
       </div>
     </Router>

@@ -11,12 +11,14 @@ function Navbar() {
 
         <div className="nav-center">
           <Link to="/">
-          <button className="nav-btn">Каталог</button>
+          <button className="nav-btn">Почетна</button>
           </Link>
           <Link to="/authors">
             <button className="nav-btn">Аутори</button>
           </Link>
+          <Link to="/books">
           <button className="nav-btn">Рецензије</button>
+          </Link>
           <button className="nav-btn">О нама</button>
         </div>
 

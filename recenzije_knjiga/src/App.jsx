@@ -11,6 +11,7 @@ import Footer from './components/Footer';
 import AllBooks from './pages/AllBooks';
 import BookDetails from './pages/BookDetails';
 import ScrollToTop from "./components/ScrollToTop";
+import AdminBooks from './pages/AdminBooks';
 function App() {
   return (
     <>
@@ -28,6 +29,7 @@ function App() {
           <Route path="/authors" element={<AuthorList />} />
           <Route path="/books" element={<AllBooks />} />
           <Route path="/book/:id" element={<BookDetails />} />
+          <Route path="/admin" element={<AdminBooks />} />
         </Routes>
       </div>
     </Router>

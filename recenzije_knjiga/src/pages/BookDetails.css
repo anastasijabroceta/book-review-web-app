@@ -1,0 +1,481 @@
+.book-details-page {
+  padding: 120px 20px 70px;
+  background:
+    radial-gradient(circle at top, rgba(202, 161, 114, 0.12), transparent 28%),
+    #ede0cf;
+  min-height: 100vh;
+}
+
+.book-details-wrapper {
+  width: min(1180px, 100%);
+  margin: 0 auto;
+ 
+}
+
+/* HERO CARD */
+.book-hero-card {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 34px;
+  align-items: start;
+  padding: 34px;
+  margin-bottom: 28px;
+   border: #4f3929 4px double;
+  background: linear-gradient(to bottom, #f8f2ea 0%, #fffaf4 100%);
+  
+  box-shadow: 0 20px 42px rgba(91, 64, 39, 0.08);
+}
+
+/* 3D BOOK */
+.book-cover-column {
+  display: flex;
+  justify-content: center;
+}
+
+.book-cover-3d-wrap {
+  perspective: 1400px;
+}
+
+.book-cover-3d {
+  width: 100%;
+  max-width: 260px;
+  aspect-ratio: 2 / 3;
+  object-fit: cover;
+  display: block;
+  border-radius: 22px;
+
+  transform: rotateY(-18deg) rotateX(4deg);
+  transform-origin: left center;
+
+  box-shadow:
+    20px 18px 35px rgba(0, 0, 0, 0.45),
+    6px 0 0 #c7b298,
+    10px 10px 18px rgba(91, 64, 39, 0.55);
+
+  transition:
+    transform 0.45s ease,
+    box-shadow 0.45s ease;
+}
+
+.book-cover-3d:hover {
+  transform: rotateY(0deg) rotateX(0deg) scale(1.03);
+  box-shadow:
+    28px 24px 48px rgba(0, 0, 0, 0.30),
+    6px 0 0 #c7b298,
+    12px 14px 24px rgba(91, 64, 39, 0.18);
+}
+
+/* MAIN INFO */
+.book-main-info {
+  min-width: 0;
+}
+
+.book-chip {
+  display: inline-block;
+  margin-bottom: 14px;
+  padding: 8px 14px;
+  border-radius: 12px;
+  border: 1px solid #d9c2a5;
+  background: #fff8ef;
+  color: #b18444;
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+
+.book-main-title {
+  margin: 0 0 10px;
+  font-family: "Merriweather", serif;
+  font-size: clamp(38px, 5vw, 64px);
+  line-height: 1.08;
+  color: #4f3929;
+}
+
+.book-author-link {
+  display: inline-block;
+  margin-bottom: 18px;
+  color: #c08b43;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 18px;
+}
+
+.book-author-link:hover {
+  text-decoration: underline;
+}
+
+.book-divider {
+  width: 100%;
+  height: 1px;
+  margin: 12px 0 22px;
+  background: linear-gradient(
+    to right,
+    #d8b88f 0%,
+    #d8b88f 40%,
+    transparent 100%
+  );
+}
+
+.book-main-description {
+  margin: 0 0 24px;
+  color: #6d5847;
+  font-size: 18px;
+  line-height: 1.85;
+  max-width: 72ch;
+}
+
+/* META BOXES */
+.book-meta-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(120px, 1fr));
+  gap: 14px;
+  margin-bottom: 18px;
+}
+
+.book-meta-card {
+  padding: 16px 16px 14px;
+  border-radius: 18px;
+  background: #fff;
+  border: 1px solid #e9dccd;
+  box-shadow: 0 10px 24px rgba(91, 64, 39, 0.05);
+}
+
+.book-meta-card span {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 12px;
+  color: #a67c52;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  font-weight: 700;
+}
+
+.book-meta-card strong {
+  color: #4f3929;
+  font-size: 15px;
+  line-height: 1.45;
+}
+
+/* RATING PANEL */
+.book-rating-panel {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  padding: 18px 20px;
+  border-radius: 20px;
+  background: #fff;
+  border: 1px solid #e9dccd;
+  box-shadow: 0 10px 24px rgba(91, 64, 39, 0.05);
+}
+
+.book-rating-left {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.rating-label {
+  font-size: 13px;
+  color: #a67c52;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  font-weight: 700;
+}
+
+.book-rating-left strong {
+  font-size: 34px;
+  color: #4f3929;
+  font-family: "Merriweather", serif;
+}
+
+.book-stars {
+  font-size: 28px;
+  letter-spacing: 4px;
+  color: #d8a84e;
+}
+
+/* REVIEW SECTION */
+/* REVIEW SECTION */
+.review-section-card {
+   position: relative;
+  padding: 28px;
+  
+  background: linear-gradient(to bottom, #f8f2ea 0%, #fffaf4 100%);
+  border: #4f3929 4px double;
+  box-shadow: 0 20px 42px rgba(91, 64, 39, 0.08);
+  overflow: hidden;}
+
+.review-section-title {
+position: relative;
+  z-index: 1;
+  margin: 0 0 18px;
+  font-family: "Merriweather", serif;
+  font-size: 40px;
+  color: #4f3929;
+}
+
+/* SAMO FORMA DOBIJA DEKORACIJU */
+.review-form-shell {
+  position: relative;
+  overflow: hidden;
+  border-radius: 24px;
+  padding: 0;
+  margin-bottom: 28px;
+  min-height: 300px;
+}
+
+/* dekorativna slika u ćošku forme */
+.review-section-image {
+ position: absolute;
+  right: 36px;
+  top: 140px;       /* KLJUČNO: ide gore uz formu */
+  width:260px;
+  opacity: 0.3;
+  pointer-events: none;
+  z-index: 0;
+  filter: sepia(0.6) contrast(0.95) brightness(1.02);
+}
+
+/* forma ide preko slike */
+.review-form {
+   position: relative;
+  z-index: 1;
+  margin-bottom: 52px; /* ostavlja razmak pre liste recenzija */
+  padding-right: 220px; /* pravi mesto za sliku desno */
+}
+
+.review-form textarea {
+   width: 100%;
+  min-height: 180px;
+  resize: vertical;
+  padding: 16px 18px;
+  border-radius: 18px;
+  border: 1px solid #dfd2c4;
+  background: #fcf8f4;
+  color: #5f4632;
+  font-size: 16px;
+  outline: none;
+  margin-bottom: 16px;
+}
+
+.review-form textarea::placeholder {
+  color: #9a8672;
+}
+
+.submit-review-btn {
+  border: none;
+  background: #b47b2c;
+  color: #fff;
+  padding: 13px 22px;
+  border-radius: 14px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.25s ease;
+}
+
+.submit-review-btn:hover {
+  background: #9f6b24;
+  transform: translateY(-1px);
+}
+
+/* BLOK RECENZIJA ISPOD */
+.reviews-block {
+  position: relative;
+  z-index: 1;
+}
+
+/* REVIEWS */
+.reviews-heading {
+  margin: 0 0 16px;
+  font-family: "Merriweather", serif;
+  font-size: 34px;
+  color: #4f3929;
+}
+
+.single-review-card {
+  display: grid;
+  grid-template-columns: 54px 1fr;
+  gap: 16px;
+  align-items: start;
+  padding: 18px;
+  border-radius: 18px;
+  background: #fff;
+  border: 1px solid #e9dccd;
+  box-shadow: 0 10px 24px rgba(91, 64, 39, 0.05);
+  margin-bottom: 14px;
+}
+
+.review-avatar {
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: #efe2d0;
+  color: #9f6b24;
+  font-weight: 700;
+  font-size: 18px;
+}
+
+.review-top-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.review-top-line strong {
+  color: #4f3929;
+  font-size: 17px;
+}
+
+.review-stars {
+  color: #d8a84e;
+  letter-spacing: 2px;
+  font-size: 15px;
+}
+
+.review-content p {
+  margin: 0;
+  color: #6d5847;
+  line-height: 1.75;
+  font-size: 15px;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .review-section-card {
+    padding: 20px;
+    border-radius: 22px;
+  }
+
+  .review-section-title,
+  .reviews-heading {
+    font-size: 30px;
+  }
+
+  .review-form-shell {
+    min-height: auto;
+  }
+
+  .review-section-image {
+    width: 120px;
+    max-width: 30%;
+    right: 12px;
+    bottom: 12px;
+    
+  }
+}
+
+/* REVIEWS */
+.reviews-heading {
+  margin: 0 0 16px;
+  font-family: "Merriweather", serif;
+  font-size: 34px;
+  color: #4f3929;
+}
+
+.single-review-card {
+  display: grid;
+  grid-template-columns: 54px 1fr;
+  gap: 16px;
+  align-items: start;
+  padding: 18px;
+  border-radius: 18px;
+  background: #fff;
+  border: 1px solid #e9dccd;
+  box-shadow: 0 10px 24px rgba(91, 64, 39, 0.05);
+  margin-bottom: 14px;
+}
+
+.review-avatar {
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: #efe2d0;
+  color: #9f6b24;
+  font-weight: 700;
+  font-size: 18px;
+}
+
+.review-top-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.review-top-line strong {
+  color: #4f3929;
+  font-size: 17px;
+}
+
+.review-stars {
+  color: #d8a84e;
+  letter-spacing: 2px;
+  font-size: 15px;
+}
+
+.review-content p {
+  margin: 0;
+  color: #6d5847;
+  line-height: 1.75;
+  font-size: 15px;
+}
+
+/* RESPONSIVE */
+@media (max-width: 1024px) {
+  .book-hero-card {
+    grid-template-columns: 1fr;
+  }
+
+  .book-cover-column {
+    justify-content: center;
+  }
+
+  .book-meta-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .book-details-page {
+    padding: 110px 16px 56px;
+  }
+
+  .book-hero-card,
+  .review-section-card {
+    padding: 20px;
+    border-radius: 22px;
+  }
+
+  .book-main-title {
+    font-size: 42px;
+  }
+
+  .book-main-description {
+    font-size: 16px;
+  }
+
+  .book-meta-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .book-rating-panel {
+    flex-direction: column;
+    align-items: start;
+  }
+
+  .reviews-heading,
+  .review-section-title {
+    font-size: 30px;
+  }
+}
+

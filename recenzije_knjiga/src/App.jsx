@@ -9,10 +9,13 @@ import AuthorList from './components/AuthorList';
 import Home from './pages/Home';
 import Footer from './components/Footer';
 import AllBooks from './pages/AllBooks';
+import BookDetails from './pages/BookDetails';
+import ScrollToTop from "./components/ScrollToTop";
 function App() {
   return (
     <>
     <Router>
+       <ScrollToTop />
       <div className='App'>
         <header id='header'>
           <Header />
@@ -24,6 +27,7 @@ function App() {
 
           <Route path="/authors" element={<AuthorList />} />
           <Route path="/books" element={<AllBooks />} />
+          <Route path="/book/:id" element={<BookDetails />} />
         </Routes>
       </div>
     </Router>

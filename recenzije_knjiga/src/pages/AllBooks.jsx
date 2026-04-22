@@ -1,6 +1,6 @@
 import React from "react";
 import "./AllBooks.css";
-
+import { Link } from "react-router-dom";
 import AnaKarenjina from "../assets/ana_karenjina.jpg";
 import Zlocin from "../assets/zlocin_i_kazna.jpg";
 import Book1984 from "../assets/1984.jpg";
@@ -172,7 +172,9 @@ const AllBooks = () => {
                   </div>
 
                   <div className="book-row-actions">
-                    <button className="primary-book-btn">Детаљи</button>
+                    <Link to={`/book/${book.id}`} className="primary-book-btn">
+  Детаљи
+</Link>
                     <button className="secondary-book-btn">Рецензије</button>
                   </div>
                 </div>

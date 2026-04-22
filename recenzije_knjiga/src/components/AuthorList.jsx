@@ -1,6 +1,7 @@
 import React from 'react';
 import './AuthorList.css';
-import heroAuthors from "../assets/hero-authors.jpg";
+import HeroAuthors from './HeroAuthors';
+import { Link } from 'react-router-dom';
 
 const authorsData = [
   { id: 1, name: "Меша Селимовић", info: "12 Рецензија", bookCount: 5, books: "Тврђава, Дервиш и смрт" },
@@ -22,14 +23,7 @@ function AuthorList() {
 
     <section className="authors-page">
 
-      <div className="authors-hero" style={{ backgroundImage: `url(${heroAuthors})` }}>
-        <div className="authors-hero-overlay">
-          <div className="section-header">
-            <h5 className="authors-subtitle">Наши Ствараоци</h5>
-            <h1 className="authors-main-title">Упознајте Ауторе</h1>
-          </div>
-        </div>
-      </div>
+      <HeroAuthors />
 
       <div className="authors-grid-container">
         <div className="authors-grid">
@@ -52,9 +46,13 @@ function AuthorList() {
                   <span className="stat-label">Активност:</span>
                   <span className="stat-value">{author.info}</span>
                 </div>
-                <button className="hero-btn primary-btn full-width">
+                <Link 
+                  to={`/author/${author.id}`} 
+                  className="hero-btn primary-btn full-width" 
+                  style={{ textDecoration: 'none', textAlign: 'center', display: 'block' }}
+                >
                   Види профил
-                </button>
+                </Link>
               </div>
 
             </div>

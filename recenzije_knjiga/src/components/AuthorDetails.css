@@ -1,0 +1,172 @@
+.author-details-wrapper {
+  width: 100%;
+  min-height: 100vh;
+  background-color: #fff3df;
+  background-image: radial-gradient(#ead8bd 0.5px, transparent 0.5px);
+  background-size: 30px 30px;
+}
+
+.author-details-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 180px 20px 60px; 
+  font-family: "Merriweather", serif;
+}
+
+/* Hero Split */
+.author-split-hero {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 30px;
+  margin-bottom: 40px;
+}
+
+.author-info-main-card {
+  position: relative;
+  background: white;
+  border: 1px solid #ead8bd;
+  border-radius: 30px;
+  padding: 40px;
+  display: flex;
+  align-items: center;
+  gap: 30px;
+}
+
+.status-badge-absolute {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background-color: #c19a6b;
+  color: #ffffff;
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: 0 4px 8px rgba(193, 154, 107, 0.2);
+}
+
+.author-image-circle-large {
+  width: 160px;
+  height: 160px;
+  background: #f3e6d5;
+  border-radius: 50%;
+  border: 4px solid #fff;
+  outline: 1px solid #ead8bd;
+}
+
+/* Ocenjivanje */
+.author-rating-card-isolated {
+  background: #fff;
+  border: 2px dashed #ead8bd;
+  border-radius: 30px;
+  padding: 30px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.star-large {
+  font-size: 35px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #5d4037;
+}
+
+.confirm-rating-btn {
+  margin-top: 15px;
+  background: #c19a6b;
+  color: white;
+  border: none;
+  padding: 8px 20px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: 0.3s;
+}
+
+/* Stats Baner */
+.author-stats-banner-modern {
+  background: #5d4037;
+  padding: 30px;
+  border-radius: 25px;
+  display: flex;
+  justify-content: space-around;
+  color: white;
+  margin-bottom: 40px;
+  box-shadow: 0 10px 25px rgba(93, 64, 55, 0.2);
+}
+
+.unit-val { display: block; font-size: 2rem; font-weight: bold; }
+.unit-label { font-size: 11px; text-transform: uppercase; color: #ead8bd; }
+
+/* Grid Sadržaj */
+.details-content-grid {
+  display: grid;
+  grid-template-columns: 1.8fr 1fr;
+  gap: 40px;
+  margin-bottom: 40px;
+}
+
+.bio-container-card, .books-card-side {
+  background: white;
+  padding: 35px;
+  border-radius: 30px;
+  border: 1px solid #ead8bd;
+}
+
+.bio-text-justify { line-height: 1.8; color: #4e342e; text-align: justify; }
+
+.contact-info-footer {
+  margin-top: 25px;
+  padding-top: 15px;
+  border-top: 1px solid #f3e6d5;
+  color: #8d6e63;
+  font-size: 14px;
+}
+
+/* Scroll Lista Knjiga */
+.books-scroll-area {
+  max-height: 200px;
+  overflow-y: auto;
+  margin-top: 20px;
+  padding-right: 10px;
+}
+
+.books-scroll-area::-webkit-scrollbar { width: 4px; }
+.books-scroll-area::-webkit-scrollbar-thumb { background: #c19a6b; border-radius: 10px; }
+
+.author-book-link {
+  display: flex;
+  align-items: center;
+  padding: 12px 15px;
+  background: #fdfaf5;
+  border: 1px solid #ead8bd;
+  border-radius: 12px;
+  text-decoration: none;
+  color: #2d1e12;
+  margin-bottom: 10px;
+  transition: 0.2s;
+}
+
+.author-book-link:hover {
+  background: #ddc09d;
+  transform: translateX(5px);
+}
+
+/* Galerija */
+.gallery-grid-simple {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.gallery-img-box {
+  height: 220px;
+  background: #ddc09d;
+  border-radius: 20px;
+  border: 1px solid #c19a6b;
+}

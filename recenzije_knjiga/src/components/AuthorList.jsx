@@ -1,6 +1,9 @@
 import React from 'react';
 import './AuthorList.css';
 import HeroAuthors from './HeroAuthors';
+import SearchAuthors from './SearchAuthors';
+import FeaturedAuthor from './FeaturedAuthor';
+import AuthorStats from './AuthorStats';
 import { Link } from 'react-router-dom';
 
 const authorsData = [
@@ -24,6 +27,12 @@ function AuthorList() {
     <section className="authors-page">
 
       <HeroAuthors />
+
+      <FeaturedAuthor />
+
+      <AuthorStats />
+
+      <SearchAuthors />
 
       <div className="authors-grid-container">
         <div className="authors-grid">

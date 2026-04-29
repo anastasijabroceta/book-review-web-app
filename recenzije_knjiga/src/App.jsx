@@ -31,7 +31,11 @@ function App() {
           <Route path="/author/:id" element={<AuthorDetails />} />
           <Route path="/books" element={<AllBooks />} />
           <Route path="/book/:id" element={<BookDetails />} />
-          <Route path="/admin" element={<AdminBooks />} />
+          <Route path="/admin" element={
+            <>
+              <AdminBooks />
+            </>
+          } />
         </Routes>
       </div>
     </Router>

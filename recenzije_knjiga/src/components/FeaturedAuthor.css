@@ -1,0 +1,80 @@
+.featured-author-section {
+  max-width: 1100px;
+  margin: -50px auto 40px; 
+  padding: 0 20px;
+  position: relative;
+  z-index: 15;
+}
+
+.featured-card {
+  background: white;
+  border: 1px solid #ead8bd;
+  border-radius: 30px;
+  padding: 40px;
+  box-shadow: 0 15px 40px rgba(93, 64, 55, 0.08);
+  position: relative;
+  overflow: hidden;
+}
+
+.featured-badge {
+  position: absolute;
+  top: 0;
+  left: 50px;
+  background: #c19a6b;
+  color: white;
+  padding: 8px 20px;
+  border-radius: 0 0 15px 15px;
+  font-size: 12px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.featured-content {
+  display: flex;
+  gap: 40px;
+  align-items: center;
+}
+
+.featured-image-box {
+  flex: 1;
+  height: 300px;
+  background-color: #f3e6d5;
+  border-radius: 20px;
+  background-size: cover;
+  background-position: center;
+}
+
+.featured-text {
+  flex: 1.5;
+}
+
+.featured-text h3 {
+  font-family: "Merriweather", serif;
+  font-size: 2.2rem;
+  color: #5d4037;
+  margin-bottom: 15px;
+}
+
+.quote {
+  font-style: italic;
+  color: #8d6e63;
+  font-size: 1.1rem;
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+
+.featured-more-btn {
+  background: transparent;
+  border: 2px solid #c19a6b;
+  color: #c19a6b;
+  padding: 10px 25px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.featured-more-btn:hover {
+  background: #c19a6b;
+  color: white;
+}

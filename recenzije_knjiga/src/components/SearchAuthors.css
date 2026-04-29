@@ -1,0 +1,81 @@
+.section-title {
+  text-align: center;
+  font-family: "Merriweather", serif;
+  font-size: 2.2rem;
+  color: #5d4037; 
+  margin-bottom: 50px; 
+  margin-top: 120px;
+  position: relative;
+  font-weight: 700;
+}
+
+.section-title::after {
+  content: "";
+  display: block;
+  width: 60px;
+  height: 3px;
+  background-color: #c19a6b; 
+  margin: 15px auto 0;
+  border-radius: 2px;
+}
+
+.search-tool-section {
+  position: relative;
+  z-index: 10; 
+  margin-top: 150px; 
+  padding: 0 20px;
+}
+
+.search-width-control {
+  max-width: 1350px; 
+  margin: 0 auto;
+  background: white;
+  border: 1px solid #ead8bd;
+  border-radius: 20px;
+  padding: 25px 40px;
+  box-shadow: 0 15px 35px rgba(93, 64, 55, 0.1);
+}
+
+.search-container {
+  display: flex;
+  gap: 25px;
+  align-items: flex-end;
+}
+
+.search-group {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.search-group label {
+  font-size: 11px;
+  text-transform: uppercase;
+  color: #8d6e63;
+  margin-bottom: 8px;
+  font-weight: bold;
+}
+
+.search-input, .search-select {
+  padding: 12px;
+  border: 1px solid #ead8bd;
+  border-radius: 12px;
+  background: #fdfaf5;
+  color: #2d1e12;
+  font-family: inherit;
+}
+
+.search-btn-action {
+  background: #5d4037;
+  color: white;
+  border: none;
+  padding: 13px 35px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.search-btn-action:hover {
+  background: #c19a6b;
+}

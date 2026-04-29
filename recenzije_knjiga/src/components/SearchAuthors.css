@@ -33,7 +33,7 @@
   border: 1px solid #ead8bd;
   border-radius: 20px;
   padding: 25px 40px;
-  box-shadow: 0 15px 35px rgba(93, 64, 55, 0.1);
+  box-shadow: 0 15px 35px rgba(93, 64, 55, 0.4);
 }
 
 .search-container {

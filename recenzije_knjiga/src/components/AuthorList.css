@@ -27,7 +27,7 @@
 
 .author-card-modern:hover {
   transform: translateY(-10px);
-  box-shadow: 0 20px 40px rgba(90, 64, 48, 0.12);
+  box-shadow: 0 20px 40px rgba(90, 64, 48, 0.4);
   border-color: #c19a6b;
 }
 

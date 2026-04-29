@@ -22,7 +22,7 @@ const HeroSection = () => {
 
         <div className="hero-buttons">
           <button className="hero-btn primary-btn">Претражи књиге</button>
-          <button className="hero-btn secondary-btn">Погледај рецензије</button>
+          <button className="hero-btn secondary-btn">Прегледај ауторе</button>
         </div>
       </div>
     </section>

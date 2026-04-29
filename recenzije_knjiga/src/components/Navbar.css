@@ -60,6 +60,7 @@
   font-size: 16px;
   font-weight: 500;
   color: #5c4633;
+  font: bold 16px/1.5, "Merriweather", serif;
   white-space: nowrap;
   transition: all 0.2s ease;
   cursor: pointer;

@@ -53,6 +53,7 @@
   line-height: 1.7;
   color: #6f5846;
   margin-bottom: 30px;
+  font-style: italic;
 }
 
 .highlights-actions {
@@ -84,7 +85,7 @@
 .secondary-btn {
   background: #fffaf4;
   color: #6a4f3a;
-  border: 1px solid #e6d6c4;
+  border: 3px solid #e6d6c4;
 }
 
 .secondary-btn:hover {

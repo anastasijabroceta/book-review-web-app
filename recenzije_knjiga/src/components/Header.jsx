@@ -1,13 +1,12 @@
-import React from 'react'
-import Navbar from './Navbar'
-import "./Navbar.css";
+import React from "react";
+import Navbar from "./Navbar";
 
-const Header = () => {
+const Header = ({ onLoginClick }) => {
   return (
     <header>
-        <Navbar/>
+      <Navbar onLoginClick={onLoginClick} />
     </header>
-  )
-}
+  );
+};
 
-export default Header
+export default Header;

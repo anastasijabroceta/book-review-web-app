@@ -19,7 +19,7 @@
   background: #fffaf4;
   color: #4f3929;
 
-  padding: 32px;
+  padding: 20px;
   border-radius: 22px;
   border: 5px double #8b754f;
 
@@ -28,6 +28,7 @@
 
   box-sizing: border-box;
   position: relative;
+  
 }
 
 .login-modal-box h2 {
@@ -67,6 +68,11 @@
 
   font-weight: 700;
   cursor: pointer;
+ 
+}
+.login-submit-btn:hover {
+  background-color: #a67c52;
+  transform: scale(1.03);
 }
 
 .login-close-btn {
@@ -76,4 +82,30 @@
   color: #4f3929;
   font-weight: 700;
   cursor: pointer;
+}
+.register {
+  margin-top: 16px;
+  font-size: 14px;
+}
+
+.register-link {
+  color: #b47b2c;
+  font-weight: 700;
+  text-decoration: none;
+  margin-left: 5px;
+}
+
+.register-link:hover {
+  text-decoration: underline;
+  
+}
+.login-modal-box input {
+  transition: 0.25s ease;
+}
+
+.login-modal-box input:focus {
+  transform: scale(1.03);
+  
+  box-shadow: 0 0 0 4px rgba(180, 123, 44, 0.18);
+  background: #fffdf9;
 }

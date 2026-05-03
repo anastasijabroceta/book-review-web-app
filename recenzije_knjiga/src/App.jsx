@@ -15,8 +15,10 @@ import HeroAuthors from "./components/HeroAuthors";
 import AuthorDetails from './components/AuthorDetails';
 import AdminBooks from './pages/AdminBooks';
 import LoginModal from './components/LoginModal';
+import RegisterModal from './components/RegisterModal';
 function App() {
   const [showLogin, setShowLogin] = useState(false);
+  const [showRegister, setShowRegister] = useState(false);
 
   return (
     <>
@@ -35,15 +37,23 @@ function App() {
             <Route path="/books" element={<AllBooks />} />
             <Route path="/book/:id" element={<BookDetails />} />
             <Route path="/admin" element={<AdminBooks />} />
+            
           </Routes>
         </div>
       </Router>
 
-      <LoginModal
-        isOpen={showLogin}
-        onClose={() => setShowLogin(false)}
-      />
-
+   <LoginModal
+  isOpen={showLogin}
+  onClose={() => setShowLogin(false)}
+  onSwitchToRegister={() => {
+    setShowLogin(false);
+    setShowRegister(true);
+  }}
+/>
+<RegisterModal
+  isOpen={showRegister}
+  onClose={() => setShowRegister(false)}
+/>
       <footer id="footer">
         <Footer />
       </footer>

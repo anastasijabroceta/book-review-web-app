@@ -1,9 +1,7 @@
 import React, { useEffect } from "react";
 import "./LoginModal.css";
 
-const LoginModal = ({isOpen, onClose, onSwitchToRegister}) => {
-
-  // Sprečava skrolovanje pozadine kada je modal otvoren
+const RegisterModal = ({ isOpen, onClose }) => {
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
@@ -20,20 +18,24 @@ const LoginModal = ({isOpen, onClose, onSwitchToRegister}) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Kliknuta prijava");
+    console.log("Registracija");
   };
 
   return (
     <div className="login-modal-overlay" onClick={onClose}>
       <div className="login-modal-box" onClick={(e) => e.stopPropagation()}>
-        <h2>Пријава</h2>
+        <h2>Регистрација</h2>
 
         <form onSubmit={handleSubmit}>
-          <input type="email" placeholder="Корисничко име" required />
-          <input type="password" placeholder="Лозинка" required />
+          <input type="text" placeholder="Име" required />
+          <input type="text" placeholder="Презиме" required />
+          <input type="email" placeholder="Email" required />
+          <input type="date" placeholder="Датум рођења" required />
+          <input type="text" placeholder="Адреса" required />
+          <input type="text" placeholder="Занимање" required />
 
           <button type="submit" className="login-submit-btn">
-            Пријави се
+            Региструј се
           </button>
 
           <button
@@ -43,21 +45,10 @@ const LoginModal = ({isOpen, onClose, onSwitchToRegister}) => {
           >
             Затвори
           </button>
-          <div className="register">
-  <p>
-    Немате профил?{" "}
-    <span
-      className="register-link"
-      onClick={onSwitchToRegister}
-    >
-      Региструјте се
-    </span>
-  </p>
-</div>
         </form>
       </div>
     </div>
   );
 };
 
-export default LoginModal;
+export default RegisterModal;

@@ -35,6 +35,9 @@ const emptyForm = {
 };
 
 const AdminBooks = () => {
+  const [showModal, setShowModal] = useState(false);
+const [selectedId, setSelectedId] = useState(null);
+  
   const [books, setBooks] = useState(initialBooks);
   const [formData, setFormData] = useState(emptyForm);
   const [editingId, setEditingId] = useState(null);
@@ -112,6 +115,7 @@ const AdminBooks = () => {
   };
 
   return (
+    <>
     <section className="admin-books-page">
       <div className="admin-books-container">
         <div className="admin-books-header">
@@ -244,12 +248,15 @@ const AdminBooks = () => {
                         Измени
                       </button>
 
-                      <button
-                        className="delete-btn"
-                        onClick={() => handleDelete(book.id)}
-                      >
-                        Обриши
-                      </button>
+                     <button
+  className="delete-btn"
+  onClick={() => {
+    setSelectedId(book.id);
+    setShowModal(true);
+  }}
+>
+  Обриши
+</button>
                     </td>
                   </tr>
                 ))}
@@ -259,6 +266,33 @@ const AdminBooks = () => {
         </div>
       </div>
     </section>
+    {showModal && (
+  <div className="confirm-modal-overlay">
+    <div className="confirm-modal-box">
+      <p>Да ли си сте сигурни да желите да обришете књигу?</p>
+
+      <button
+        onClick={() => {
+          handleDelete(selectedId);
+          setShowModal(false);
+          setSelectedId(null);
+        }}
+      >
+        Да
+      </button>
+
+      <button
+        onClick={() => {
+          setShowModal(false);
+          setSelectedId(null);
+        }}
+      >
+        Не
+      </button>
+    </div>
+  </div>
+)}
+  </>
   );
 };
 

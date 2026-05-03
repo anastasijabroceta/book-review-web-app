@@ -1,5 +1,6 @@
 import "./HeroSection.css";
 import heroBooks from "../assets/hero-books.jpg";
+import { Link } from "react-router-dom";
 
 const HeroSection = () => {
   return (
@@ -21,8 +22,12 @@ const HeroSection = () => {
         </p>
 
         <div className="hero-buttons">
+          <Link to="/books">
           <button className="hero-btn primary-btn">Претражи књиге</button>
+          </Link>
+          <Link to="/authors">
           <button className="hero-btn secondary-btn">Прегледај ауторе</button>
+          </Link>
         </div>
       </div>
     </section>

@@ -5,23 +5,24 @@ import SearchAuthors from './SearchAuthors';
 import FeaturedAuthor from './FeaturedAuthor';
 import AuthorStats from './AuthorStats';
 import { Link } from 'react-router-dom';
+import img1 from "../assets/mesa_selimovic.jpg";
+import img2 from "../assets/ivo_andric.jpg";
+import img3 from "../assets/nenad_gugl.jpg";
+import img4 from "../assets/milos_crnjanski.jpg";
+import img5 from "../assets/desanka_maksimovic.jpg";
+import img6 from "../assets/borislav_pekic.jpg";
 
 const authorsData = [
-  { id: 1, name: "Меша Селимовић", info: "12 Рецензија", bookCount: 5, books: "Тврђава, Дервиш и смрт" },
-  { id: 2, name: "Иво Андрић", info: "24 Рецензије", bookCount: 8, books: "На Дрини ћуприја, Проклета авлија" },
-  { id: 3, name: "Ненад Гугл", info: "8 Рецензија", bookCount: 3, books: "Умро сам у петак, Велелепота секунде" }
+  { id: 1, name: "Меша Селимовић", info: "12 Рецензија", bookCount: "5 Књига", books: "Тврђава, Дервиш и смрт", image: img1 },
+  { id: 2, name: "Иво Андрић", info: "24 Рецензије", bookCount: "8 Књига", books: "На Дрини ћуприја, Проклета авлија", image: img2 },
+  { id: 3, name: "Ненад Гугл", info: "8 Рецензија", bookCount: "3 Књиге", books: "Умро сам у петак, Велелепота секунде", image: img3 },
+  { id: 4, name: "Милош Црњански", info: "15 Рецензија", bookCount: "6 Књига", books: "Сеобе, Роман о Лондону", image: img4 },
+  { id: 5, name: "Десанка Максимовић", info: "40 Рецензија", bookCount: "12 Књига", books: "Тражим помиловање", image: img5 },
+  { id: 6, name: "Борислав Пекић", info: "18 Рецензија", bookCount: "7 Књига", books: "Беснило, Златно руно", image: img6 }
 ];
 
 function AuthorList() {
-  const getBookLabel = (count) => {
-    const lastDigit = count % 10;
-    const lastTwoDigits = count % 100;
-    if (lastTwoDigits >= 11 && lastTwoDigits <= 19) return "Књига";
-    if (lastDigit === 1) return "Књига";
-    if (lastDigit >= 2 && lastDigit <= 4) return "Књиге";
-    return "Књига";
-  };
-
+  
   return (
 
     <section className="authors-page">
@@ -40,11 +41,18 @@ function AuthorList() {
             <div key={author.id} className="author-card-modern">
 
               <div className="book-count-badge">
-                {author.bookCount} {getBookLabel(author.bookCount)}
+                {author.bookCount}
               </div>
 
               <div className="author-avatar-container">
-                <div className="author-image-circle"></div>
+                <div 
+                className="author-image-circle" 
+                style={{ 
+                  backgroundImage: `url(${author.image})`,
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'top' 
+                }}
+              ></div>
               </div>
 
               <div className="author-content-modern">

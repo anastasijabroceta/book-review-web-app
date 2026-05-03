@@ -41,18 +41,19 @@
   color: #ead8bd;
   text-transform: uppercase;
   letter-spacing: 3px;
-  font-weight: 700;
+  font-weight: 400;
   margin-bottom: 15px;
-  font-size: 14px;
+  font-size: 18px;
   display: block; 
   width: 100%;
 }
 
 .authors-main-title {
-  color: #ffffff;
+  margin-bottom: 20px;
+  font-weight: 700;
+  color: #f8f1e7;
   font-size: clamp(2.5rem, 5vw, 4rem);
   font-family: "Merriweather", serif;
-  margin: 0;
   width: 100%;
 }
 

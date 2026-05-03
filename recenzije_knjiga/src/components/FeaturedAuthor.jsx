@@ -1,5 +1,7 @@
 import React from 'react';
 import './FeaturedAuthor.css';
+import { Link } from 'react-router-dom';
+import heroAuthors from "../assets/mesa_selimovic.jpg";
 
 const FeaturedAuthor = () => {
   return (
@@ -8,7 +10,7 @@ const FeaturedAuthor = () => {
         <div className="featured-badge">Аутор месеца</div>
         <div className="featured-content">
           <div className="featured-image-box">
-             
+            <img src={heroAuthors} alt="Меша Селимовић" className="featured-author-img" />
           </div>
           <div className="featured-text">
             <h3>Меша Селимовић</h3>
@@ -17,7 +19,9 @@ const FeaturedAuthor = () => {
               Овог месеца славимо стваралаштво писца који је заронио у најдубље тмине људске душе. 
               Његова дела су ванвременски мостови између прошлости и садашњости.
             </p>
-            <button className="featured-more-btn">Прочитај биографију</button>
+            <Link to="/author/1" className="featured-more-btn" style={{ textDecoration: 'none', textAlign: 'center' }}>
+              Прочитај биографију
+            </Link>
           </div>
         </div>
       </div>

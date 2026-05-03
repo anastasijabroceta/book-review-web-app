@@ -1,10 +1,9 @@
 .section-title {
   text-align: center;
   font-family: "Merriweather", serif;
-  font-size: 2.2rem;
+  font-size: 3rem;
   color: #5d4037; 
-  margin-bottom: 50px; 
-  margin-top: 120px;
+  margin-bottom: 80px; 
   position: relative;
   font-weight: 700;
 }
@@ -22,8 +21,8 @@
 .search-tool-section {
   position: relative;
   z-index: 10; 
-  margin-top: 150px; 
-  padding: 0 20px;
+  padding: 100px 20px;
+  background-color: #fdedda; 
 }
 
 .search-width-control {
@@ -49,7 +48,7 @@
 }
 
 .search-group label {
-  font-size: 11px;
+  font-size: 13px;
   text-transform: uppercase;
   color: #8d6e63;
   margin-bottom: 8px;
@@ -59,23 +58,28 @@
 .search-input, .search-select {
   padding: 12px;
   border: 1px solid #ead8bd;
-  border-radius: 12px;
+  border-radius: 14px;
   background: #fdfaf5;
   color: #2d1e12;
   font-family: inherit;
+  height: 45px; 
+  box-sizing: border-box; 
+  display: block;
+  width: 100%;
 }
 
 .search-btn-action {
   background: #5d4037;
   color: white;
   border: none;
-  padding: 13px 35px;
-  border-radius: 12px;
+  padding: 0 35px; 
+  height: 45px;    
+  border-radius: 14px;
   cursor: pointer;
   font-weight: bold;
   transition: 0.3s;
 }
 
 .search-btn-action:hover {
-  background: #c19a6b;
+  background: #3a2822;
 }

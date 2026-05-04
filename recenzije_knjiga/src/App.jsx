@@ -16,6 +16,7 @@ import AuthorDetails from './components/AuthorDetails';
 import AdminPage from './pages/AdminPage';
 import LoginModal from './components/LoginModal';
 import RegisterModal from './components/RegisterModal';
+
 function App() {
   const [showLogin, setShowLogin] = useState(false);
   const [showRegister, setShowRegister] = useState(false);

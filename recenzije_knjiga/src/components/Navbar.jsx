@@ -20,7 +20,7 @@ function Navbar({ onLoginClick }) {
           </Link>
 
           <Link to="/books">
-            <button className="nav-btn">Рецензије</button>
+            <button className="nav-btn">Књиге</button>
           </Link>
 
           <Link to="/admin">

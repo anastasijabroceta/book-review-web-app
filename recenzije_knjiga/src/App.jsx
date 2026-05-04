@@ -16,7 +16,7 @@ import AuthorDetails from './components/AuthorDetails';
 import AdminPage from './pages/AdminPage';
 import LoginModal from './components/LoginModal';
 import RegisterModal from './components/RegisterModal';
-
+import MyProfile from './pages/MyProfile';
 function App() {
   const [showLogin, setShowLogin] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
@@ -38,6 +38,7 @@ function App() {
             <Route path="/books" element={<AllBooks />} />
             <Route path="/book/:id" element={<BookDetails />} />
             <Route path="/admin" element={<AdminPage />} />
+            <Route path="/my-profile" element={<MyProfile />} />
             
           </Routes>
         </div>

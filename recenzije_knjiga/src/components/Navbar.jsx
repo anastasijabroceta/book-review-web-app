@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import logo from "../assets/logo.png";
 import "./Navbar.css";
-
+import MyProfile from "../pages/MyProfile";
 function Navbar({ onLoginClick }) {
   return (
     <div className="nav-wrapper">
@@ -25,6 +25,9 @@ function Navbar({ onLoginClick }) {
 
           <Link to="/admin">
             <button className="nav-btn">Администратор</button>
+          </Link>
+          <Link to="/my-profile">
+            <button className="nav-btn">Мој профил</button>
           </Link>
         </div>
 

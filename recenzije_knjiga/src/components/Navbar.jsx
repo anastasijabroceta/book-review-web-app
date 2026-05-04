@@ -15,17 +15,18 @@ function Navbar({ onLoginClick }) {
             <button className="nav-btn">Почетна</button>
           </Link>
 
-          <Link to="/authors">
-            <button className="nav-btn">Аутори</button>
-          </Link>
-
           <Link to="/books">
             <button className="nav-btn">Књиге</button>
+          </Link>
+          
+          <Link to="/authors">
+            <button className="nav-btn">Аутори</button>
           </Link>
 
           <Link to="/admin">
             <button className="nav-btn">Администратор</button>
           </Link>
+
           <Link to="/my-profile">
             <button className="nav-btn">Мој профил</button>
           </Link>

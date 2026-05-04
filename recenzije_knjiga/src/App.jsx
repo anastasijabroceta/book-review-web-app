@@ -13,34 +13,51 @@ import BookDetails from './pages/BookDetails';
 import ScrollToTop from "./components/ScrollToTop";
 import HeroAuthors from "./components/HeroAuthors";
 import AuthorDetails from './components/AuthorDetails';
-import AdminBooks from './pages/AdminBooks';
-
+import AdminPage from './pages/AdminPage';
+import LoginModal from './components/LoginModal';
+import RegisterModal from './components/RegisterModal';
 function App() {
+  const [showLogin, setShowLogin] = useState(false);
+  const [showRegister, setShowRegister] = useState(false);
+
   return (
     <>
-    <Router>
-       <ScrollToTop />
-      <div className='App'>
-        <header id='header'>
-          <Header />
-        </header>
+      <Router>
+        <ScrollToTop />
 
-        <Routes>
-          <Route path="/" element={<Home/>} />
-          <Route path="/authors" element={<AuthorList />} />
-          <Route path="/author/:id" element={<AuthorDetails />} />
-          <Route path="/books" element={<AllBooks />} />
-          <Route path="/book/:id" element={<BookDetails />} />
-          <Route path="/admin" element={
-            <>
-              <AdminBooks />
-            </>
-          } />
-        </Routes>
-      </div>
-    </Router>
-    <footer id='footer'><Footer /></footer></>
+        <div className="App">
+          <header id="header">
+            <Header onLoginClick={() => setShowLogin(true)} />
+          </header>
+
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/authors" element={<AuthorList />} />
+            <Route path="/author/:id" element={<AuthorDetails />} />
+            <Route path="/books" element={<AllBooks />} />
+            <Route path="/book/:id" element={<BookDetails />} />
+            <Route path="/admin" element={<AdminPage />} />
+            
+          </Routes>
+        </div>
+      </Router>
+
+   <LoginModal
+  isOpen={showLogin}
+  onClose={() => setShowLogin(false)}
+  onSwitchToRegister={() => {
+    setShowLogin(false);
+    setShowRegister(true);
+  }}
+/>
+<RegisterModal
+  isOpen={showRegister}
+  onClose={() => setShowRegister(false)}
+/>
+      <footer id="footer">
+        <Footer />
+      </footer>
+    </>
   );
 }
-
 export default App;

@@ -1,0 +1,111 @@
+.login-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  z-index: 999999;
+}
+
+.login-modal-box {
+  width: 380px;
+  max-width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+
+  background: #fffaf4;
+  color: #4f3929;
+
+  padding: 20px;
+  border-radius: 22px;
+  border: 5px double #8b754f;
+
+  text-align: center;
+  box-shadow: 0 22px 45px rgba(0, 0, 0, 0.35);
+
+  box-sizing: border-box;
+  position: relative;
+  
+}
+
+.login-modal-box h2 {
+  margin: 0 0 22px;
+  font-family: "Merriweather", serif;
+  font-size: 30px;
+}
+
+.login-modal-box form {
+  width: 100%;
+}
+
+.login-modal-box input {
+  width: 100%;
+  box-sizing: border-box;
+
+  padding: 13px 15px;
+  margin-bottom: 14px;
+
+  border-radius: 12px;
+  border: 2px solid #dfd2c4;
+  background: #fcf8f4;
+  color: #4f3929;
+  font-size: 15px;
+  outline: none;
+}
+
+.login-submit-btn {
+  width: 100%;
+  margin-top: 8px;
+  padding: 12px;
+
+  border: none;
+  border-radius: 999px;
+   background-color: #c19a6b;
+  color: white;
+
+  font-weight: 700;
+  cursor: pointer;
+ 
+}
+.login-submit-btn:hover {
+  background-color: #a67c52;
+  transform: scale(1.03);
+}
+
+.login-close-btn {
+  margin-top: 14px;
+  border: none;
+  background: transparent;
+  color: #4f3929;
+  font-weight: 700;
+  cursor: pointer;
+}
+.register {
+  margin-top: 16px;
+  font-size: 14px;
+}
+
+.register-link {
+  color: #b47b2c;
+  font-weight: 700;
+  text-decoration: none;
+  margin-left: 5px;
+}
+
+.register-link:hover {
+  text-decoration: underline;
+  
+}
+.login-modal-box input {
+  transition: 0.25s ease;
+}
+
+.login-modal-box input:focus {
+  transform: scale(1.03);
+  
+  box-shadow: 0 0 0 4px rgba(180, 123, 44, 0.18);
+  background: #fffdf9;
+}

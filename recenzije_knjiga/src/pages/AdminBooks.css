@@ -1,5 +1,5 @@
 .admin-books-page {
-  padding: 120px 20px 70px;
+  padding: 0px 20px 70px;
   background: #ede0cf;
   min-height: 100vh;
 }
@@ -7,24 +7,6 @@
 .admin-books-container {
   width: min(1280px, 100%);
   margin: 0 auto;
-}
-
-.admin-books-header {
-  text-align: center;
-  margin-bottom: 28px;
-}
-
-.admin-books-header h1 {
-  margin: 0 0 12px;
-  font-family: "Merriweather", serif;
-  font-size: clamp(38px, 5vw, 64px);
-  color: #4f3929;
-}
-
-.admin-books-header p {
-  margin: 0;
-  color: #6d5847;
-  font-size: 18px;
 }
 
 .admin-books-form-card,
@@ -225,4 +207,33 @@
 .confirm-modal-box button:last-of-type {
   background: #d8c3a5;
   color: #3b2f2f;
+}
+
+.featured-more-btn-admin {
+  border: none;
+  border-radius: 999px;
+  background: #c19a6b; /* Tvoja boja sa slike */
+  color: white;
+  padding: 14px 28px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.25s ease;
+  display: inline-block;    
+  text-decoration: none;
+  font-family: "Merriweather", serif;
+}
+
+.featured-more-btn-admin:hover {
+  background: #a67c52;
+  transform: translateY(-2px);
+}
+
+.form-select {
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: 14px;
+  border: 3px solid #dfd2c4;
+  background: #fcf8f4;
+  color: #5f4632;
+  font-family: inherit;
 }

@@ -118,11 +118,7 @@ const [selectedId, setSelectedId] = useState(null);
     <>
     <section className="admin-books-page">
       <div className="admin-books-container">
-        <div className="admin-books-header">
-          <h1>Управљање књигама</h1>
-          <p>Додавање, измена, преглед и брисање књига на једном месту.</p>
-        </div>
-
+        
         <div className="admin-books-form-card">
           <h2>{editingId !== null ? "Измени књигу" : "Додај нову књигу"}</h2>
 
@@ -195,7 +191,7 @@ const [selectedId, setSelectedId] = useState(null);
             {error && <p className="form-error">{error}</p>}
 
             <div className="form-actions">
-              <button type="submit" className="save-btn">
+              <button type="submit" className="featured-more-btn-admin">
                 {editingId !== null ? "Сачувај измене" : "Додај књигу"}
               </button>
 

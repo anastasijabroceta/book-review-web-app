@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "./MyProfile.css";
 import MyReviews from "../components/MyReviews";
+import MyRatings from "../components/MyRatings";
 import User from "../assets/user.png";
 const MyProfile = () => {
   const [activeTab, setActiveTab] = useState("profile");
@@ -41,7 +42,7 @@ const MyProfile = () => {
 
             <button
               className={activeTab === "ratings" ? "active" : ""}
-              onClick={() => setActiveTab("reviews")}
+              onClick={() => setActiveTab("ratings")}
             >
               Оцене
             </button>
@@ -86,6 +87,7 @@ const MyProfile = () => {
             )}
 
             {activeTab === "reviews" && <MyReviews />}
+            {activeTab === "ratings" && <MyRatings />}
             
           </div>
         </section>

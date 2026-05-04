@@ -19,6 +19,7 @@
   margin-bottom: 24px;
 }
 
+
 .admin-books-form-card h2,
 .admin-books-table-card h2 {
   margin: 0 0 20px;
@@ -37,6 +38,7 @@
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 16px;
+  
 }
 
 .form-grid input {
@@ -48,7 +50,12 @@
   color: #5f4632;
   font-size: 15px;
   outline: none;
+ 
 }
+.form-grid :focus{transform: scale(1.03);
+  
+  box-shadow: 0 0 0 4px rgba(180, 123, 44, 0.18);
+  background: #fffdf9;}
 
 .form-error {
   margin: 0;
@@ -68,7 +75,7 @@
 .edit-btn,
 .delete-btn {
   border: none;
-  border-radius: 12px;
+  border-radius: 30px;
   padding: 11px 16px;
   font-size: 14px;
   font-weight: 700;
@@ -78,7 +85,7 @@
 
 .save-btn,
 .edit-btn {
-  background: #b47b2c;
+  background: #c19a6b;
   color: #fff;
 }
 
@@ -212,7 +219,7 @@
 .featured-more-btn-admin {
   border: none;
   border-radius: 999px;
-  background: #c19a6b; /* Tvoja boja sa slike */
+  background: #c19a6b; 
   color: white;
   padding: 14px 28px;
   cursor: pointer;
@@ -220,7 +227,8 @@
   transition: 0.25s ease;
   display: inline-block;    
   text-decoration: none;
-  font-family: "Merriweather", serif;
+  font-size: 14px;
+  font-weight: 700;
 }
 
 .featured-more-btn-admin:hover {

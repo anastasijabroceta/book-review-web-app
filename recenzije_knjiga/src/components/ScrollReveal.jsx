@@ -16,7 +16,7 @@ function ScrollReveal({ children, className = "", delay = 0 }) {
         }
       },
       {
-        threshold: 0.18,
+        threshold: 0.18, //kada je 18% elementa vidljivo → pokreni animaciju
       }
     );
 

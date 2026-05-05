@@ -105,8 +105,6 @@ const AuthorDetails = () => {
   const { id } = useParams();
   const author = authorsData.find(a => a.id === parseInt(id));
 
-  if (!author) return <div className="error-view"><h2>Аутор није пронађен.</h2></div>;
-
   return (
     <div className="author-details-wrapper">
       <div className="author-details-page">
@@ -116,7 +114,7 @@ const AuthorDetails = () => {
             <div className="status-badge-absolute">{author.status}</div>
             <div 
               className="author-image-circle-large"
-              style={{ backgroundImage: `url(${author.image})`, backgroundSize: 'cover', backgroundPosition: 'top' }}
+              style={{ backgroundImage: `url(${author.image})`}}
             ></div>
             <div className="author-text-meta">
               <span className="subtitle-gold">КЊИЖЕВНИ ВЕЛИКАН</span>
@@ -128,12 +126,14 @@ const AuthorDetails = () => {
           <div className="author-rating-card-isolated">
             <h3>Оцените аутора</h3>
             <div className="interactive-stars-box">
-              {[...Array(5)].map((_, i) => (
-                <span key={i} className="star-large">★</span>
-              ))}
+              <span className="star-large">★</span>
+              <span className="star-large">★</span>
+              <span className="star-large">★</span>
+              <span className="star-large">★</span>
+              <span className="star-large">★</span>
             </div>
             <button className="confirm-rating-btn">ПОТВРДИ ОЦЕНУ</button>
-            <div className="current-avg-display" style={{marginTop: '15px', fontSize: '0.9rem', color: '#5d4037'}}>
+            <div className="current-avg-display">
               Просечна оцена: <strong>{author.averageRating}</strong>
             </div>
           </div>
@@ -155,12 +155,12 @@ const AuthorDetails = () => {
         </section>
 
         <div className="details-content-grid">
-          <article className="bio-container-card">
+          <div className="bio-container-card">
             <h2 className="classic-title">Биографија</h2>
             <p className="bio-text-justify">{author.bio}</p>
-          </article>
+          </div>
 
-          <aside className="books-list-container">
+          <div className="books-list-container">
             <div className="books-card-side">
               <h2 className="classic-title">Листа свих књига</h2>
               <div className="books-scroll-area">
@@ -172,7 +172,7 @@ const AuthorDetails = () => {
                 ))}
               </div>
             </div>
-          </aside>
+          </div>
         </div>
 
         <section className="author-quote-break">
@@ -182,8 +182,8 @@ const AuthorDetails = () => {
           </div>
         </section>
 
-        <section className="author-gallery-footer">
-          <h2 className="classic-title" style={{marginBottom: '40px'}}>Галерија слика</h2>
+        <section className="author-gallery">
+          <h2 className="classic-title">Галерија слика</h2>
           <div className="gallery-grid-modern">
             <div className="gallery-img-box" style={{ backgroundImage: `url(${author.image})` }}></div>
             <div className="gallery-img-box" style={{ opacity: 0.6 }}></div>

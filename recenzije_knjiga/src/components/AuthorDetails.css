@@ -6,7 +6,7 @@
 }
 
 .author-details-page {
-  max-width: 1300px; /* Proširena sekcija */
+  max-width: 1300px; 
   margin: 0 auto;
   padding: 100px 40px 80px; 
   animation: fadeInPage 0.8s ease-out;
@@ -17,7 +17,6 @@
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* Hero Sekcija */
 .author-split-hero {
   display: grid;
   grid-template-columns: 1.5fr 1fr;
@@ -48,11 +47,11 @@
   position: absolute;
   top: 30px;
   right: 40px;
-  background: #c19a6b; /* Promenjeno u zlatnu */
+  background: #c19a6b; 
   color: white;
   padding: 6px 18px;
   border-radius: 25px;
-  font-size: 0.7rem;
+  font-size: 12px;
   font-weight: 700;
   letter-spacing: 1px;
   text-transform: uppercase;
@@ -61,19 +60,20 @@
 .author-image-circle-large {
   width: 220px;
   height: 220px;
-  border-radius: 30px; /* Moderniji "squircle" umesto punog kruga */
+  border-radius: 30px; 
   border: 8px solid #fff;
   box-shadow: 0 15px 35px rgba(93, 64, 55, 0.15);
   flex-shrink: 0;
   transform: rotate(-3deg);
   transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  background-size: cover;
+  background-position: top;
 }
 
 .author-info-main-card:hover .author-image-circle-large {
   transform: rotate(0deg) scale(1.05);
 }
 
-/* Subtitle i Title inspirisani slikom */
 .subtitle-gold {
   color: #c19a6b;
   font-weight: 700;
@@ -85,7 +85,7 @@
 }
 
 .author-text-meta h1 {
-  font-size: 3.8rem;
+  font-size: 60px;
   color: #5d4037;
   line-height: 1.1;
   margin: 0;
@@ -94,7 +94,6 @@
   margin-bottom: 10px;
 }
 
-/* Rating Card - Svetlija varijanta */
 .author-rating-card-isolated {
   background: white;
   border: 2px solid #ead8bd;
@@ -109,13 +108,17 @@
 
 .author-rating-card-isolated h3 {
   color: #5d4037;
-  font-size: 1.8rem;
+  font-size: 30px;
   margin-bottom: 20px;
   font-weight: 700;
   font-family: "Merriweather", serif;
 }
 
-.star-large { color: #c19a6b; font-size: 32px; margin: 0 2px; }
+.star-large { 
+  color: #c19a6b; 
+  font-size: 32px; 
+  margin: 0 2px; 
+}
 
 .confirm-rating-btn {
   margin-top: 25px;
@@ -130,15 +133,23 @@
   letter-spacing: 1px;
 }
 
-.confirm-rating-btn:hover { background: #5d4037; transform: scale(1.05); }
+.confirm-rating-btn:hover { 
+  background: #5d4037; 
+  transform: scale(1.05); 
+}
 
-/* Stats Banner */
+.current-avg-display {
+  margin-top: 15px;
+  font-size: 15px;
+  color: #5d4037;
+}
+
 .author-stats-banner-modern {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 30px;
   margin-bottom: 60px;
-  background: #5d4037; /* Ovde smo zadržali tamnu za kontrast, ali sa manje visine */
+  background: #5d4037; 
   padding: 40px;
   border-radius: 40px;
 }
@@ -148,10 +159,22 @@
   color: white;
 }
 
-.unit-val { display: block; font-size: 2.8rem; font-weight: 800; color: #fff; font-family: "Merriweather", serif;}
-.unit-label { font-size: 12px; text-transform: uppercase; color: #c19a6b; font-weight: 700; letter-spacing: 2px; }
+.unit-val { 
+  display: block; 
+  font-size: 45px; 
+  font-weight: 800; 
+  color: #fff; 
+  font-family: "Merriweather", serif;
+}
 
-/* Content Grid */
+.unit-label { 
+  font-size: 12px; 
+  text-transform: uppercase; 
+  color: #c19a6b; 
+  font-weight: 700; 
+  letter-spacing: 2px; 
+}
+
 .details-content-grid {
   display: grid;
   grid-template-columns: 1.6fr 1fr;
@@ -166,7 +189,7 @@
 }
 
 .classic-title {
-  font-size: 1.8rem;
+  font-size: 30px;
   color: #5d4037;
   margin-bottom: 30px;
   border-left: 6px solid #c19a6b;
@@ -178,10 +201,9 @@
 .bio-text-justify {
   line-height: 2;
   color: #4e342e;
-  font-size: 1.1rem;
+  font-size: 17px;
 }
 
-/* Bibliografija - Svetlija varijanta */
 .author-book-link {
   display: flex;
   align-items: center;
@@ -202,7 +224,6 @@
   transform: translateX(10px);
 }
 
-/* Quote Sekcija */
 .author-quote-break {
   background: #ead8bd;
   padding: 60px;
@@ -214,7 +235,7 @@
 }
 
 .quote-icon {
-  font-size: 5rem;
+  font-size: 80px;
   color: white;
   position: absolute;
   top: 10px;
@@ -223,7 +244,7 @@
 }
 
 .author-quote-break p {
-  font-size: 1.6rem;
+  font-size: 28px;
   font-style: italic;
   color: #5d4037;
   max-width: 800px;
@@ -231,7 +252,6 @@
   position: relative;
 }
 
-/* Galerija */
 .gallery-grid-modern {
   display: grid;
   grid-template-columns: 2fr 1fr 1fr;

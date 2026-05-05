@@ -21,7 +21,6 @@
   height: 100%;
   background: rgba(0, 0, 0, 0.5); 
   backdrop-filter: blur(5px); 
-  -webkit-backdrop-filter: blur(5px);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -46,7 +45,7 @@
   margin-bottom: 0;
   font-weight: 700;
   color: #f8f1e7; 
-  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-size: 56px;
   font-family: "Merriweather", serif;
 }
 

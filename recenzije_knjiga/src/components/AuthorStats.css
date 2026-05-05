@@ -3,7 +3,7 @@
   background-color: #c19a6b; 
   padding: 40px 0;
   margin: 90px 0 0 0; 
-  box-shadow: inset 0 5px 15px rgba(0,0,0,0.05); 
+  box-shadow: inset 0 5px 15px rgba(0,0,0,0.2); 
 }
 
 .stats-content {
@@ -22,7 +22,7 @@
 .stat-number {
   display: block;
   font-family: "Merriweather", serif;
-  font-size: 2.5rem; 
+  font-size: 42px; 
   font-weight: 900;
   color: #2d1e12; 
   margin-bottom: 5px;
@@ -40,14 +40,4 @@
   width: 1.5px;
   height: 50px;
   background-color: rgba(45, 30, 18, 0.2); 
-}
-
-@media (max-width: 768px) {
-  .stats-content {
-    flex-direction: column;
-    gap: 30px;
-  }
-  .stat-divider {
-    display: none;
-  }
 }

@@ -47,27 +47,21 @@ function AuthorList() {
               <div className="author-avatar-container">
                 <div 
                 className="author-image-circle" 
-                style={{ 
-                  backgroundImage: `url(${author.image})`,
-                  backgroundSize: 'cover',
-                  backgroundPosition: 'top' 
-                }}
-              ></div>
+                style={{ backgroundImage: `url(${author.image})` }}
+                ></div>
               </div>
 
               <div className="author-content-modern">
                 <h3>{author.name}</h3>
                 <p className="author-meta">Најпознатија дела: <i>{author.books}</i></p>
                 <hr className="card-separator" />
+
                 <div className="author-stats-row">
                   <span className="stat-label">Активност:</span>
                   <span className="stat-value">{author.info}</span>
                 </div>
-                <Link 
-                  to={`/author/${author.id}`} 
-                  className="hero-btn primary-btn full-width" 
-                  style={{ textDecoration: 'none', textAlign: 'center', display: 'block' }}
-                >
+
+                <Link to={`/author/${author.id}`} className="author-btn">
                   Види профил
                 </Link>
               </div>

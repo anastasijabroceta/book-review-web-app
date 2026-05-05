@@ -58,7 +58,7 @@
 
 .featured-text h3 {
   font-family: "Merriweather", serif;
-  font-size: 2.2rem;
+  font-size: 35px;
   color: #5d4037;
   margin-bottom: 15px;
 }
@@ -66,7 +66,7 @@
 .quote {
   font-style: italic;
   color: #8d6e63;
-  font-size: 1.1rem;
+  font-size: 18px;
   margin-bottom: 20px;
   line-height: 1.5;
 }
@@ -85,7 +85,8 @@
   font-weight: bold;
   transition: 0.25s ease;
   display: inline-block;    
-  text-decoration: none;   
+  text-decoration: none; 
+  text-align: center;
 }
 
 .featured-more-btn:hover {

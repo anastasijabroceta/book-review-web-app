@@ -16,27 +16,32 @@ const AdminPage = () => {
         <div className="admin-hero-overlay">
           <div className="admin-hero-content">
             <span className="admin-subtitle-text">Администраторски панел</span>
+
             <h1 className="admin-main-title-text">
               {activeTab === "books" ? "Управљање књигама" : "Управљање ауторима"}
             </h1>
+            
           </div>
         </div>
       </div>
 
       <div className="admin-nav-container">
         <div className="admin-tabs-box">
+
           <button 
             className={`admin-tab-btn ${activeTab === "books" ? "active" : ""}`}
             onClick={() => setActiveTab("books")}
           >
             Управљање књигама
           </button>
+
           <button 
             className={`admin-tab-btn ${activeTab === "authors" ? "active" : ""}`}
             onClick={() => setActiveTab("authors")}
           >
             Управљање ауторима
           </button>
+
         </div>
       </div>
 
@@ -48,8 +53,11 @@ const AdminPage = () => {
               : "Ажурирајте податке о писцима, њихове биографије и статус активности."}
           </p>
         </div>
+
         {activeTab === "books" ? <AdminBooks /> : <AdminAuthors />}
+
       </div>
+
     </div>
   );
 };

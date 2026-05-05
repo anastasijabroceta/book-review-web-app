@@ -23,7 +23,7 @@ const AdminAuthors = () => {
     } else {
       setAuthors([...authors, { ...formData, id: Date.now() }]);
     }
-    setFormData({ name: "", surname: "", status: "Преминуо", birthDate: "", awards: "", phone: "" });
+    setFormData({ name: "", surname: "", status: "", birthDate: "", awards: "", phone: "" });
   };
 
   return (
@@ -93,7 +93,12 @@ const AdminAuthors = () => {
           <table className="admin-books-table">
             <thead>
               <tr>
-                <th>Аутор</th><th>Статус</th><th>Рођен</th><th>Награде</th><th>Контакт</th><th>Акције</th>
+                <th>Аутор</th>
+                <th>Статус</th>
+                <th>Рођен</th>
+                <th>Награде</th>
+                <th>Контакт</th>
+                <th>Акције</th>
               </tr>
             </thead>
             <tbody>

@@ -1,7 +1,14 @@
+.search-tool-section {
+  position: relative;
+  z-index: 10; 
+  padding: 100px 20px;
+  background-color: #fdedda; 
+}
+
 .section-title {
   text-align: center;
   font-family: "Merriweather", serif;
-  font-size: 3rem;
+  font-size: 48px;
   color: #5d4037; 
   margin-bottom: 80px; 
   position: relative;
@@ -16,13 +23,6 @@
   background-color: #c19a6b; 
   margin: 15px auto 0;
   border-radius: 2px;
-}
-
-.search-tool-section {
-  position: relative;
-  z-index: 10; 
-  padding: 100px 20px;
-  background-color: #fdedda; 
 }
 
 .search-width-control {

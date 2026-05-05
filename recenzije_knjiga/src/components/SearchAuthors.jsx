@@ -7,6 +7,7 @@ const SearchAuthors = () => {
       <h1 className="section-title">Сви наши аутори</h1>
       <div className="search-width-control"> 
         <div className="search-container">
+          
           <div className="search-group">
             <label>Претрага по имену</label>
             <input 

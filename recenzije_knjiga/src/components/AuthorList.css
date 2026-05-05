@@ -1,5 +1,5 @@
 .authors-grid-container {
-  padding: 50px 5% 100px; 
+  padding: 50px 0 100px; 
   margin-top: 0; 
   position: relative;
   z-index: 5;
@@ -62,6 +62,8 @@
   box-shadow: 0 8px 15px rgba(0,0,0,0.05);
   overflow: hidden;
   margin: 0 auto;
+  background-size: cover;
+  background-position: top;
 }
 
 .author-content-modern {
@@ -74,7 +76,7 @@
   font-weight: 700;
   color: #2d1e12;
   margin-bottom: 8px;
-  font-size: 1.5rem;
+  font-size: 25px;
 }
 
 .author-meta {
@@ -113,34 +115,23 @@
   text-transform: uppercase;
 }
 
-.full-width {
+.author-btn {
   width: 100%;
-}
-
-.hero-btn {
   border: none;
   border-radius: 999px;
   padding: 14px 28px;
   font-size: 14px;
   font-weight: 600;
+  background-color: #c19a6b;
+  color: white;
   transition: 0.25s ease;
   cursor: pointer;
   font-family: "Merriweather", serif;
+  display: block; 
+  text-align: center;
+  text-decoration: none;
 }
 
-.primary-btn {
-  background-color: #c19a6b;
-  color: white;
-}
-
-.primary-btn:hover {
+.author-btn:hover {
   background-color: #a67c52;
-}
-
-@media (max-width: 1100px) {
-  .authors-grid { grid-template-columns: repeat(2, 1fr); }
-}
-
-@media (max-width: 768px) {
-  .authors-grid { grid-template-columns: 1fr; }
 }

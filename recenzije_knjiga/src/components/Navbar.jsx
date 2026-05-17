@@ -1,8 +1,15 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import logo from "../assets/logo.png";
 import "./Navbar.css";
-import MyProfile from "../pages/MyProfile";
+
 function Navbar({ onLoginClick }) {
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  const closeMenu = () => {
+    setMenuOpen(false);
+  };
+
   return (
     <div className="nav-wrapper">
       <nav className="custom-navbar">
@@ -10,31 +17,48 @@ function Navbar({ onLoginClick }) {
           <img src={logo} alt="Књигоказ" className="logo-img" />
         </div>
 
-        <div className="nav-center">
-          <Link to="/">
+        <button
+          className="hamburger-btn"
+          onClick={() => setMenuOpen(!menuOpen)}
+        >
+          ☰
+        </button>
+
+        <div className={`nav-center ${menuOpen ? "active" : ""}`}>
+          <Link to="/" onClick={closeMenu}>
             <button className="nav-btn">Почетна</button>
           </Link>
 
-          <Link to="/books">
+          <Link to="/books" onClick={closeMenu}>
             <button className="nav-btn">Књиге</button>
           </Link>
-          
-          <Link to="/authors">
+
+          <Link to="/authors" onClick={closeMenu}>
             <button className="nav-btn">Аутори</button>
           </Link>
 
-          <Link to="/admin">
+          <Link to="/admin" onClick={closeMenu}>
             <button className="nav-btn">Администратор</button>
           </Link>
 
-          <Link to="/my-profile">
+          <Link to="/my-profile" onClick={closeMenu}>
             <button className="nav-btn">Мој профил</button>
           </Link>
+
+          <button
+            className="login-btn mobile-login"
+            onClick={() => {
+              onLoginClick();
+              closeMenu();
+            }}
+          >
+            Пријава
+          </button>
         </div>
 
         <div className="nav-right">
           <button className="login-btn" onClick={onLoginClick}>
-            <p>Пријава</p>
+            Пријава
           </button>
         </div>
       </nav>

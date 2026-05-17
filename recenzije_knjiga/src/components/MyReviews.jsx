@@ -20,8 +20,9 @@ const MyReviews = () => {
   return (
     <div className="slide-card">
       <h2>Моје рецензије</h2>
+      
 
-      {reviews.map((review) => (
+      {reviews.map((review) => ( //prolazi kroz sve recenzije i pravi html element za svaku od njih
         <article key={review.id} className="review-item">
           <p>„{review.tekst}”</p>
 

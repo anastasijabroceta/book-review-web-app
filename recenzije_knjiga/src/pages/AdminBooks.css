@@ -245,3 +245,94 @@
   color: #5f4632;
   font-family: inherit;
 }
+* {
+  box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+  .table-wrapper {
+    overflow-x: visible;
+  }
+
+  .admin-books-table {
+    min-width: 0;
+    width: 100%;
+  }
+
+  .admin-books-table thead {
+    display: none;
+  }
+
+  .admin-books-table,
+  .admin-books-table tbody,
+  .admin-books-table tr,
+  .admin-books-table td {
+    display: block;
+    width: 100%;
+  }
+
+  .admin-books-table tbody tr {
+    background: #fffdf9;
+    border: 1px solid #ead9c8;
+    border-radius: 18px;
+    padding: 14px;
+    margin-bottom: 18px;
+    box-shadow: 0 10px 22px rgba(91, 64, 39, 0.08);
+  }
+
+  .admin-books-table tbody td {
+    border-bottom: 1px solid #eee1d2;
+    padding: 10px 0;
+    font-size: 15px;
+  }
+
+  .admin-books-table tbody td::before {
+    content: attr(data-label);
+    display: block;
+    font-weight: 700;
+    color: #4f3929;
+    margin-bottom: 4px;
+  }
+
+  .admin-books-table tbody td:last-child {
+    border-bottom: none;
+  }
+
+  .actions-cell {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .actions-cell button,
+  .actions-cell a {
+    width: 100%;
+    text-align: center;
+    margin-top: 20px;
+  }
+}
+@media (max-width: 480px) {
+  .admin-books-form-card,
+  .admin-books-table-card {
+    padding: 14px;
+    border-width: 4px;
+  }
+
+  .admin-books-form-card h2,
+  .admin-books-table-card h2 {
+    font-size: 22px;
+  }
+
+  .save-btn,
+  .cancel-btn,
+  .edit-btn,
+  .delete-btn,
+  .featured-more-btn-admin {
+    width: 100%;
+  }
+
+  .confirm-modal-box {
+    width: 92%;
+    padding: 22px;
+  }
+}

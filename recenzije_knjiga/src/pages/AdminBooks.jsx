@@ -229,14 +229,14 @@ const [selectedId, setSelectedId] = useState(null);
               <tbody>
                 {books.map((book) => (
                   <tr key={book.id}>
-                    <td>{book.title}</td>
-                    <td>{book.author}</td>
-                    <td>{book.genre}</td>
-                    <td>{book.format}</td>
-                    <td>{book.price}</td>
-                    <td>{book.pages}</td>
-                    <td>{book.isbn}</td>
-                    <td className="actions-cell">
+                    <td data-label="Назив">{book.title}</td>
+                    <td data-label="Аутор">{book.author}</td>
+                    <td data-label="Жанр">{book.genre}</td>
+                    <td data-label="Формат">{book.format}</td>
+                    <td data-label="Цена">{book.price}</td>
+                    <td data-label="Страна">{book.pages}</td>
+                    <td data-label="ISBN">{book.isbn}</td>
+                    <td data-label="Акције" className="actions-cell">
                       <button
                         className="edit-btn"
                         onClick={() => handleEdit(book)}

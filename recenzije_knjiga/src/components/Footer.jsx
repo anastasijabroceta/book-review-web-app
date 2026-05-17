@@ -34,13 +34,13 @@ const Footer = () => {
             <li>Email: info@knjigokaz.rs</li>
             <li>Телефон: +381 60 123 456</li>
             <li>Нови Сад, Србија</li>
-             <ul class="example-1">
-  <li class="icon-content">
+             <ul className ="example-1">
+  <li className="icon-content">
     <a
       href="https://www.facebook.com/"
       aria-label="Spotify"
       data-social="spotify"
-      class="link"
+      className="link"
     >
       <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20">
         <path
@@ -49,7 +49,7 @@ const Footer = () => {
         ></path>
       </svg>
     </a>
-    <div class="tooltip">Facebook</div>
+    <div className="tooltip">Facebook</div>
   </li>
   <li class="icon-content">
     <a

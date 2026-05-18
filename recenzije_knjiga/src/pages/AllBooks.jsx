@@ -1,86 +1,47 @@
 import React from "react";
 import "./AllBooks.css";
 import { Link } from "react-router-dom";
-import AnaKarenjina from "../assets/ana_karenjina.jpg";
-import Zlocin from "../assets/zlocin_i_kazna.jpg";
-import Book1984 from "../assets/1984.jpg";
-import Poreklo from "../assets/poreklo.jpg";
-import VelelepotaSekunde from "../assets/velelepota_sekunde.jpg";
-const books = [
-  {
-    id: 1,
-    title: "Ана Карењина",
-    author: "Лав Толстој",
-    genre: "Роман",
-    format: "Тврди повез",
-    price: "1.290 РСД",
-    pages: 864,
-    isbn: "978-86-7543-555-2",
-    rating: 4.9,
-    description:
-      "Трагична љубавна прича која истовремено слика руско друштво и дубоко проучава људску природу.",
-    image: AnaKarenjina,
-  },
-  {
-    id: 2,
-    title: "Злочин и казна",
-    author: "Фјодор Достојевски",
-    genre: "Психолошки роман",
-    format: "Меки повез",
-    price: "1.590 РСД",
-    pages: 528,
-    isbn: "9788675431234",
-    rating: 4.8,
-    description:
-      "Један од најдубљих романа о кривици, савести, моралу и унутрашњем преиспитивању човека.",
-    image: Zlocin,
-  },
-  {
-    id: 3,
-    title: "1984",
-    author: "Џорџ Орвел",
-    genre: "Дистопија",
-    format: "Тврди повез",
-    price: "1.450 РСД",
-    pages: 328,
-    isbn: "979-86-7543-555-2",
-    rating: 4.7,
-    description:
-      "Моћна дистопија о надзору, страху, манипулацији језиком и губитку личне слободе.",
-    image: Book1984,
-  },
-  {
-    id: 4,
-    title: "Поријекло", 
-    author: "Ден Браун",
-    genre: "Литература",
-    format: "Тврди повез",
-    price: "1.350 РСД",
-    pages: 480,
-    isbn: "978-86-7543-555-2",
-    rating: 4.6,
-    description:
-      "Поријекло је роман о тајни и заговору који се одвија у свету банкира и политичара.",
-    image:  Poreklo,
-  },
-  {
-    id: 5,
-    title: "Велелепота секунде",
-    author: "Ненад Гугл",
-    genre: "Роман",
-    format: "Тврди повез",
-    price: "1.290 РСД",
-    pages: 227,
-    isbn: "978-86-81746-01-1",
-    rating: 4.8,
-    description:
-    "“Велелепота секунде” вас води кроз бујицу снажних емоција, од туге и немоћи до охрабрења и узвишености, откривајући како свака секунда може бити испуњена вечном величином. У тешком и смутном времену где је човештво изгубљено, овај роман приказује преображење човека и неогранчени потенцијал у нашем развоју.",
-    image: VelelepotaSekunde,
-  }
+import { useEffect, useState } from "react";
+import { ref, get } from "firebase/database";
+import { db } from "../firebase";
 
-];
 
 const AllBooks = () => {
+  const [books, setBooks] = useState([]);
+
+ useEffect(() => {
+  const fetchBooks = async () => {
+    try {
+      const booksSnapshot = await get(ref(db, "knjige"));
+      const authorsSnapshot = await get(ref(db, "autori"));
+
+      if (booksSnapshot.exists() && authorsSnapshot.exists()) {
+        const booksData = booksSnapshot.val();
+        const authorsData = authorsSnapshot.val();
+
+        const booksArray = Object.keys(booksData).map((key) => {
+          const book = booksData[key];
+          const author = authorsData[book.idAutora];
+
+          return {
+            id: key,
+            ...book,
+            autorImePrezime: author
+              ? `${author.ime} ${author.prezime}`
+              : "Непознат аутор",
+          };
+        });
+
+        setBooks(booksArray);
+      }
+    } catch (error) {
+      console.log("Greška pri učitavanju knjiga:", error);
+    }
+  };
+
+  fetchBooks();
+}, []);
+
   return (
     <section className="allbooks">
       <div className="allbooks-container">
@@ -136,21 +97,25 @@ const AllBooks = () => {
             {books.map((book) => (
               <article className="book-row-card" key={book.id}>
                 <div className="book-row-image-wrap">
-                  <img src={book.image} alt={book.title} className="book-row-image" />
+                  <img
+  src={book.slike?.[0]}
+  alt={book.naziv}
+  className="book-row-image"
+/>
                 </div>
 
                 <div className="book-row-content">
                   <div className="book-row-top">
                     <div>
-                      <span className="book-row-tag">{book.genre}</span>
-                      <h2>{book.title}</h2>
-                      <p className="book-row-author">{book.author}</p>
+                      <span className="book-row-tag">{book.zanr}</span>
+                      <h2>{book.naziv}</h2>
+                      <p className="book-row-author">{book.autorImePrezime}</p>
                     </div>
 
                     <div className="book-row-rating">⭐ {book.rating}</div>
                   </div>
 
-                  <p className="book-row-description">{book.description}</p>
+                  <p className="book-row-description">{book.opis}</p>
 
                   <div className="book-row-meta">
                     <div className="meta-box">
@@ -159,11 +124,11 @@ const AllBooks = () => {
                     </div>
                     <div className="meta-box">
                       <span>Цена</span>
-                      <strong>{book.price}</strong>
+                      <strong>{book.cena}</strong>
                     </div>
                     <div className="meta-box">
                       <span>Страна</span>
-                      <strong>{book.pages}</strong>
+                      <strong>{book.brojStrana}</strong>
                     </div>
                     <div className="meta-box">
                       <span>ISBN</span>

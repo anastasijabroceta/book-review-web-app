@@ -1,10 +1,21 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import logo from "../assets/logo.png";
 import "./Navbar.css";
 
 function Navbar({ onLoginClick }) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [username, setUsername] = useState("");
+
+  useEffect(() => {
+    const savedUsername = localStorage.getItem(
+      "ulogovaniKorisnickoIme"
+    );
+
+    if (savedUsername) {
+      setUsername(savedUsername);
+    }
+  }, []);
 
   const closeMenu = () => {
     setMenuOpen(false);
@@ -41,26 +52,42 @@ function Navbar({ onLoginClick }) {
             <button className="nav-btn">Администратор</button>
           </Link>
 
-          <Link to="/my-profile" onClick={closeMenu}>
-            <button className="nav-btn">Мој профил</button>
-          </Link>
+         
 
-          <button
-            className="login-btn mobile-login"
-            onClick={() => {
-              onLoginClick();
-              closeMenu();
-            }}
-          >
-            Пријава
-          </button>
+          {username ? (
+  <Link to="/my-profile" onClick={closeMenu}>
+    <button className="login-btn mobile-login">
+      {username}
+    </button>
+  </Link>
+) : (
+  <button
+    className="login-btn mobile-login"
+    onClick={() => {
+      onLoginClick();
+      closeMenu();
+    }}
+  >
+    Пријава
+  </button>
+)}
         </div>
-
-        <div className="nav-right">
-          <button className="login-btn" onClick={onLoginClick}>
-            Пријава
-          </button>
-        </div>
+<div className="nav-right">
+  {username ? (
+    <Link to="/my-profile">
+      <button className="login-btn">
+        {username}
+      </button>
+    </Link>
+  ) : (
+    <button
+      className="login-btn"
+      onClick={onLoginClick}
+    >
+      Пријава
+    </button>
+  )}
+</div>
       </nav>
     </div>
   );

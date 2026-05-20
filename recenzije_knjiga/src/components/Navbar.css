@@ -73,11 +73,15 @@
   border-color: #d7c5ae;
   transform: translateY(-1px);
 }
-
+.nav-right a,
+.nav-center a {
+  text-decoration: none;
+  color: inherit;
+}
 .login-btn {
   --primary-color: #5c4633;
   --hovered-color: #c69a6b;
-
+  
   border: none;
   background: none;
   padding: 10px 8px;

@@ -1,7 +1,18 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "./LoginModal.css";
+import { ref, get, set } from "firebase/database";
+import { db } from "../firebase";
 
 const RegisterModal = ({ isOpen, onClose }) => {
+  const [ime, setIme] = useState("");
+  const [prezime, setPrezime] = useState("");
+  const [email, setEmail] = useState("");
+  const [datumRodjenja, setDatumRodjenja] = useState("");
+  const [adresa, setAdresa] = useState("");
+  const [zanimanje, setZanimanje] = useState("");
+  const [korisnickoIme, setKorisnickoIme] = useState("");
+  const [lozinka, setLozinka] = useState("");
+
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
@@ -16,9 +27,70 @@ const RegisterModal = ({ isOpen, onClose }) => {
 
   if (!isOpen) return null;
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Registracija");
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+if (!emailRegex.test(email)) {
+  alert("Унесите исправан email.");
+  return;
+}
+
+if (lozinka.length < 6) {
+  alert("Лозинка мора имати најмање 6 карактера.");
+  return;
+}
+
+    try {
+      const snapshot = await get(ref(db, "korisnici"));
+      const korisnici = snapshot.exists() ? snapshot.val() : {};
+
+      const korisniciArray = Object.values(korisnici);
+
+      const emailPostoji = korisniciArray.some(
+        (korisnik) => korisnik.email === email
+      );
+
+      const korisnickoImePostoji = korisniciArray.some(
+        (korisnik) => korisnik.korisnickoIme === korisnickoIme
+      );
+
+      if (emailPostoji) {
+        alert("Корисник са овим email-ом већ постоји.");
+        return;
+      }
+
+      if (korisnickoImePostoji) {
+        alert("Корисничко име је већ заузето.");
+        return;
+      }
+
+      const noviBroj = Object.keys(korisnici).length + 1;
+      const noviId = `kor${String(noviBroj).padStart(3, "0")}`;
+
+      const noviKorisnik = {
+        adresa,
+        datumRodjenja,
+        email,
+        ime,
+        korisnickoIme,
+        lozinka,
+        prezime,
+        zanimanje,
+      };
+
+      await set(ref(db, `korisnici/${noviId}`), noviKorisnik);
+
+      localStorage.setItem("ulogovaniKorisnikId", noviId);
+      localStorage.setItem("ulogovaniKorisnickoIme", korisnickoIme);
+
+      alert("Успешна регистрација!");
+      onClose();
+      window.location.reload();
+    } catch (error) {
+      console.log("Грешка при регистрацији:", error);
+      alert("Дошло је до грешке при регистрацији.");
+    }
   };
 
   return (
@@ -27,12 +99,68 @@ const RegisterModal = ({ isOpen, onClose }) => {
         <h2>Регистрација</h2>
 
         <form onSubmit={handleSubmit}>
-          <input type="text" placeholder="Име" required />
-          <input type="text" placeholder="Презиме" required />
-          <input type="email" placeholder="Email" required />
-          <input type="date" placeholder="Датум рођења" required />
-          <input type="text" placeholder="Адреса" required />
-          <input type="text" placeholder="Занимање" required />
+          <input
+            type="text"
+            placeholder="Име"
+            value={ime}
+            onChange={(e) => setIme(e.target.value)}
+            required
+          />
+
+          <input
+            type="text"
+            placeholder="Презиме"
+            value={prezime}
+            onChange={(e) => setPrezime(e.target.value)}
+            required
+          />
+
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+
+          <input
+            type="date"
+            value={datumRodjenja}
+            onChange={(e) => setDatumRodjenja(e.target.value)}
+            required
+          />
+
+          <input
+            type="text"
+            placeholder="Адреса"
+            value={adresa}
+            onChange={(e) => setAdresa(e.target.value)}
+            required
+          />
+
+          <input
+            type="text"
+            placeholder="Занимање"
+            value={zanimanje}
+            onChange={(e) => setZanimanje(e.target.value)}
+            required
+          />
+
+          <input
+            type="text"
+            placeholder="Корисничко име"
+            value={korisnickoIme}
+            onChange={(e) => setKorisnickoIme(e.target.value)}
+            required
+          />
+
+          <input
+            type="password"
+            placeholder="Лозинка"
+            value={lozinka}
+            onChange={(e) => setLozinka(e.target.value)}
+            required
+          />
 
           <button type="submit" className="login-submit-btn">
             Региструј се

@@ -8,12 +8,15 @@ function Navbar({ onLoginClick }) {
   const [username, setUsername] = useState("");
 
   useEffect(() => {
-    const savedUsername = localStorage.getItem(
-      "ulogovaniKorisnickoIme"
-    );
+    const savedId = localStorage.getItem("ulogovaniKorisnikId");
+    const savedUsername = localStorage.getItem("ulogovaniKorisnickoIme");
 
-    if (savedUsername) {
+    if (savedId && savedUsername) {
       setUsername(savedUsername);
+    } else {
+      setUsername("");
+      localStorage.removeItem("ulogovaniKorisnikId");
+      localStorage.removeItem("ulogovaniKorisnickoIme");
     }
   }, []);
 
@@ -52,42 +55,34 @@ function Navbar({ onLoginClick }) {
             <button className="nav-btn">Администратор</button>
           </Link>
 
-         
-
           {username ? (
-  <Link to="/my-profile" onClick={closeMenu}>
-    <button className="login-btn mobile-login">
-      {username}
-    </button>
-  </Link>
-) : (
-  <button
-    className="login-btn mobile-login"
-    onClick={() => {
-      onLoginClick();
-      closeMenu();
-    }}
-  >
-    Пријава
-  </button>
-)}
+            <Link to="/my-profile" onClick={closeMenu}>
+              <button className="login-btn mobile-login">{username}</button>
+            </Link>
+          ) : (
+            <button
+              className="login-btn mobile-login"
+              onClick={() => {
+                onLoginClick();
+                closeMenu();
+              }}
+            >
+              Пријава
+            </button>
+          )}
         </div>
-<div className="nav-right">
-  {username ? (
-    <Link to="/my-profile">
-      <button className="login-btn">
-        {username}
-      </button>
-    </Link>
-  ) : (
-    <button
-      className="login-btn"
-      onClick={onLoginClick}
-    >
-      Пријава
-    </button>
-  )}
-</div>
+
+        <div className="nav-right">
+          {username ? (
+            <Link to="/my-profile">
+              <button className="login-btn">{username}</button>
+            </Link>
+          ) : (
+            <button className="login-btn" onClick={onLoginClick}>
+              Пријава
+            </button>
+          )}
+        </div>
       </nav>
     </div>
   );

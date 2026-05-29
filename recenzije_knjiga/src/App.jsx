@@ -1,5 +1,5 @@
 import { Button } from 'bootstrap';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Header from './components/Header';
 import HeroSection from './components/HeroSection';
@@ -19,6 +19,8 @@ import RegisterModal from './components/RegisterModal';
 import MyProfile from './pages/MyProfile';
 
 function App() {
+  
+  
   const [showLogin, setShowLogin] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
 

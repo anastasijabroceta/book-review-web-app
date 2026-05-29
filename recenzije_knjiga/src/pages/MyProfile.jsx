@@ -1,20 +1,63 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./MyProfile.css";
 import MyReviews from "../components/MyReviews";
 import MyRatings from "../components/MyRatings";
 import User from "../assets/user.png";
+import { ref, get } from "firebase/database";
+import { db } from "../firebase";
+
 const MyProfile = () => {
   const [activeTab, setActiveTab] = useState("profile");
+  const [user, setUser] = useState(null);
+  const handleLogout = () => {
+  localStorage.removeItem("ulogovaniKorisnikId");
+  localStorage.removeItem("ulogovaniKorisnickoIme");
 
-  const user = {
-    ime: "Ана",
-    prezime: "Петровић",
-    email: "ana@email.com",
-    adresa: "Бања Лука",
-    zanimanje: "Студент",
-    datumRodjenja: "12.05.2002.",
-    avatar: User,
-  };
+  window.location.href = "/";
+};
+  useEffect(() => {
+    const fetchLoggedUser = async () => {
+      try {
+        const korisnikId = localStorage.getItem("ulogovaniKorisnikId");
+
+        if (!korisnikId) {
+          setUser(null);
+          return;
+        }
+
+        const snapshot = await get(ref(db, `korisnici/${korisnikId}`));
+
+        if (snapshot.exists()) {
+          setUser({
+            id: korisnikId,
+            avatar: User,
+            ...snapshot.val(),
+          });
+        } else {
+          setUser(null);
+        }
+      } catch (error) {
+        console.log("Greška pri učitavanju korisnika:", error);
+      }
+    };
+
+    fetchLoggedUser();
+  }, []);
+
+  if (!user) {
+    return (
+      <main className="profile-page">
+        <section className="profile-shell">
+          <section className="profile-main">
+            <div className="profile-heading">
+              <p>Кориснички профил</p>
+              <h1>Нисте пријављени</h1>
+            </div>
+          </section>
+        </section>
+      </main>
+    );
+  }
 
   return (
     <main className="profile-page">
@@ -22,7 +65,9 @@ const MyProfile = () => {
         <aside className="profile-side">
           <img src={user.avatar} alt="Корисник" className="side-avatar" />
 
-          <h2>{user.ime} {user.prezime}</h2>
+          <h2>
+            {user.ime} {user.prezime}
+          </h2>
           <p>{user.email}</p>
 
           <nav className="side-menu">
@@ -52,7 +97,9 @@ const MyProfile = () => {
         <section className="profile-main">
           <div className="profile-heading">
             <p>Кориснички профил</p>
-            <h1>{user.ime} {user.prezime}</h1>
+            <h1>
+              {user.ime} {user.prezime}
+            </h1>
           </div>
 
           <div className="profile-divider"></div>
@@ -63,6 +110,11 @@ const MyProfile = () => {
                 <h2>Основни подаци</h2>
 
                 <div className="profile-info-grid">
+                  <div>
+                    <span>Корисничко име</span>
+                    <p>{user.korisnickoIme}</p>
+                  </div>
+
                   <div>
                     <span>Email</span>
                     <p>{user.email}</p>
@@ -88,9 +140,18 @@ const MyProfile = () => {
 
             {activeTab === "reviews" && <MyReviews />}
             {activeTab === "ratings" && <MyRatings />}
-            
           </div>
+        <div className="logout-divider">
+  <button
+    className="logout-button"
+    onClick={handleLogout}
+  >
+    Одјави се
+  </button>
+</div>
         </section>
+        
+        
       </section>
     </main>
   );

@@ -302,3 +302,14 @@
   color: #b47b2c;
   font-size: 20px;
 }
+.logout-button{
+  border: none;
+  border-radius: 999px;
+  padding: 14px 28px;
+  font-size: clamp(18px, 3vw, 10px) !important;
+  font-weight: 600;
+  transition: 0.25s ease;
+  cursor: pointer;
+  background-color:#c85c55;
+  color: white;
+}

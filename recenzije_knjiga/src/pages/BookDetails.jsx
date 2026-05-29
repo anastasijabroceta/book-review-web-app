@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import "./BookDetails.css";
-import { ref, get } from "firebase/database";
+import { ref, get, set } from "firebase/database";
 import { db } from "../firebase";
 import { useEffect } from "react";
 import VintagePhoto from "../assets/vintage_photo.png";
@@ -12,10 +12,8 @@ const BookDetails = () => {
 
   const [book, setBook] = useState(null);
   const [authorName, setAuthorName] = useState("");
-  const [reviews, setReviews] = useState([
-    "Одлична књига, оставила је снажан утисак на мене. Толстој маестрално описује емоције и људске односе.",
-    "Један од најбољих романа које сам прочитао. Препоручујем свима!",
-  ]);
+const [reviews, setReviews] = useState([]);
+const [popupMessage, setPopupMessage] = useState("");
 
   const [newReview, setNewReview] = useState("");
 
@@ -38,13 +36,37 @@ const BookDetails = () => {
 
         if (authorSnapshot.exists()) {
           const authorData = authorSnapshot.val();
-
-          setAuthorName(
-            `${authorData.ime} ${authorData.prezime}`
-          );
+          setAuthorName(`${authorData.ime} ${authorData.prezime}`);
         }
       } else {
         setBook(null);
+      }
+
+      const reviewsSnapshot = await get(ref(db, "recenzije"));
+      const usersSnapshot = await get(ref(db, "korisnici"));
+
+      if (reviewsSnapshot.exists()) {
+        const reviewsData = reviewsSnapshot.val();
+        const usersData = usersSnapshot.exists() ? usersSnapshot.val() : {};
+
+        const reviewsArray = Object.keys(reviewsData)
+          .map((key) => {
+            const review = reviewsData[key];
+            const korisnik = usersData[review.idKorisnika];
+
+            return {
+              id: key,
+              ...review,
+              korisnikIme: korisnik
+                ? `${korisnik.ime} ${korisnik.prezime}`
+                : "Непознат корисник",
+            };
+          })
+          .filter((review) => review.idKnjige === id);
+
+        setReviews(reviewsArray);
+      } else {
+        setReviews([]);
       }
     } catch (error) {
       console.log("Greška pri učitavanju knjige:", error);
@@ -64,17 +86,88 @@ const BookDetails = () => {
     );
   }
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    if (newReview.trim() === "") return;
+  const korisnikId = localStorage.getItem("ulogovaniKorisnikId");
 
-    setReviews([newReview, ...reviews]);
+  if (!korisnikId) {
+   setPopupMessage(
+  "Морате бити пријављени да бисте оставили рецензију."
+);
+    return;
+  }
+
+  if (newReview.trim() === "") {
+   setPopupMessage(
+  "Рецензија не може бити празна."
+);
+    return;
+  }
+
+  try {
+    const korisnikSnapshot = await get(ref(db, `korisnici/${korisnikId}`));
+
+    if (!korisnikSnapshot.exists()) {
+     setPopupMessage(
+  "Корисник није пронађен."
+);
+      return;
+    }
+
+    const korisnik = korisnikSnapshot.val();
+
+    const recenzijeSnapshot = await get(ref(db, "recenzije"));
+    const recenzijeData = recenzijeSnapshot.exists()
+      ? recenzijeSnapshot.val()
+      : {};
+
+    const noviBroj = Object.keys(recenzijeData).length + 1;
+    const novaRecenzijaId = `rec${String(noviBroj).padStart(3, "0")}`;
+
+    const novaRecenzija = {
+      idKnjige: id,
+      idKorisnika: korisnikId,
+      tekst: newReview.trim(),
+      datum: new Date().toISOString().split("T")[0],
+    };
+
+    await set(ref(db, `recenzije/${novaRecenzijaId}`), novaRecenzija);
+
+    setReviews([
+      {
+        id: novaRecenzijaId,
+        ...novaRecenzija,
+        korisnikIme: `${korisnik.ime} ${korisnik.prezime}`,
+      },
+      ...reviews,
+    ]);
+
     setNewReview("");
-  };
+  } catch (error) {
+    console.log("Грешка при додавању рецензије:", error);
+    setPopupMessage("Дошло је до грешке при додавању рецензије.");
+  }
+};
 
   return (
     <section className="book-details-page">
+      {popupMessage && (
+  <div className="custom-popup-overlay">
+    <div className="custom-popup">
+      <h3>Обавештење</h3>
+
+      <p>{popupMessage}</p>
+
+      <button
+        onClick={() => setPopupMessage("")}
+        className="popup-btn"
+      >
+        У реду
+      </button>
+    </div>
+  </div>
+)}
       <div className="book-details-wrapper">
         <div className="book-hero-card">
           <div className="book-cover-column">
@@ -159,20 +252,22 @@ const BookDetails = () => {
           <div className="reviews-block" id="reviews">
             <h3 className="reviews-heading">Рецензије ({reviews.length})</h3>
 
-            {reviews.map((review, index) => (
-              <div className="single-review-card" key={index}>
-                <div className="review-avatar">{index % 2 === 0 ? "Ј" : "М"}</div>
+         {reviews.map((review) => (
+  <div className="single-review-card" key={review.id}>
+    <div className="review-avatar">
+      {review.korisnikIme?.charAt(0)}
+    </div>
 
-                <div className="review-content">
-                  <div className="review-top-line">
-                    <strong>{index % 2 === 0 ? "Јелена М." : "Марко П."}</strong>
-                    <span className="review-stars">★★★★★</span>
-                  </div>
+    <div className="review-content">
+      <div className="review-top-line">
+        <strong>{review.korisnikIme}</strong>
+        <span className="review-stars">★★★★★</span>
+      </div>
 
-                  <p>{review}</p>
-                </div>
-              </div>
-            ))}
+      <p>{review.tekst}</p>
+    </div>
+  </div>
+))}
           </div>
         </div>
       </div>

@@ -1,20 +1,23 @@
 import React, { useEffect, useState } from "react";
 import "./MyProfile.css";
-import MyReviews from "../components/MyReviews";
 import MyRatings from "../components/MyRatings";
 import User from "../assets/user.png";
 import { ref, get } from "firebase/database";
 import { db } from "../firebase";
+import { Link } from "react-router-dom";
 
 const MyProfile = () => {
   const [activeTab, setActiveTab] = useState("profile");
   const [user, setUser] = useState(null);
-  const handleLogout = () => {
-  localStorage.removeItem("ulogovaniKorisnikId");
-  localStorage.removeItem("ulogovaniKorisnickoIme");
+  const [myReviews, setMyReviews] = useState([]);
 
-  window.location.href = "/";
-};
+  const handleLogout = () => {
+    localStorage.removeItem("ulogovaniKorisnikId");
+    localStorage.removeItem("ulogovaniKorisnickoIme");
+
+    window.location.href = "/";
+  };
+
   useEffect(() => {
     const fetchLoggedUser = async () => {
       try {
@@ -25,16 +28,43 @@ const MyProfile = () => {
           return;
         }
 
-        const snapshot = await get(ref(db, `korisnici/${korisnikId}`));
+        const userSnapshot = await get(ref(db, `korisnici/${korisnikId}`));
 
-        if (snapshot.exists()) {
+        if (userSnapshot.exists()) {
           setUser({
             id: korisnikId,
             avatar: User,
-            ...snapshot.val(),
+            ...userSnapshot.val(),
           });
         } else {
           setUser(null);
+          return;
+        }
+
+        const reviewsSnapshot = await get(ref(db, "recenzije"));
+        const booksSnapshot = await get(ref(db, "knjige"));
+
+        if (reviewsSnapshot.exists()) {
+          const reviewsData = reviewsSnapshot.val();
+          const booksData = booksSnapshot.exists() ? booksSnapshot.val() : {};
+
+          const reviewsArray = Object.keys(reviewsData)
+            .map((key) => {
+              const review = reviewsData[key];
+              const book = booksData[review.idKnjige];
+
+              return {
+                id: key,
+                ...review,
+                nazivKnjige: book ? book.naziv : "Непозната књига",
+                slikaKnjige: book?.slike?.[0],
+              };
+            })
+            .filter((review) => review.idKorisnika === korisnikId);
+
+          setMyReviews(reviewsArray);
+        } else {
+          setMyReviews([]);
         }
       } catch (error) {
         console.log("Greška pri učitavanju korisnika:", error);
@@ -138,20 +168,54 @@ const MyProfile = () => {
               </section>
             )}
 
-            {activeTab === "reviews" && <MyReviews />}
+            {activeTab === "reviews" && (
+              <section className="profile-info-box slide-card">
+                <h2>Моје рецензије</h2>
+
+                {myReviews.length === 0 ? (
+                  <p>Још увек нисте оставили ниједну рецензију.</p>
+                ) : (
+                  <div className="my-reviews-list">
+                    {myReviews.map((review) => (
+                      <div className="my-review-card" key={review.id}>
+                        {review.slikaKnjige && (
+                          <img
+                            src={review.slikaKnjige}
+                            alt={review.nazivKnjige}
+                            className="my-review-book-img"
+                          />
+                        )}
+
+                        <div>
+                          <h3>{review.nazivKnjige}</h3>
+                          <p>{review.tekst}</p>
+
+                          {review.datum && (
+                            <span>Датум: {review.datum}</span>
+                          )}
+
+                          <br />
+
+                          <Link to={`/book/${review.idKnjige}`}>
+                            Погледај књигу
+                          </Link>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </section>
+            )}
+
             {activeTab === "ratings" && <MyRatings />}
           </div>
-        <div className="logout-divider">
-  <button
-    className="logout-button"
-    onClick={handleLogout}
-  >
-    Одјави се
-  </button>
-</div>
+
+          <div className="logout-divider">
+            <button className="logout-button" onClick={handleLogout}>
+              Одјави се
+            </button>
+          </div>
         </section>
-        
-        
       </section>
     </main>
   );

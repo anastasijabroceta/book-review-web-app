@@ -29,7 +29,7 @@ const LoginModal = ({ isOpen, onClose, onSwitchToRegister }) => {
       const snapshot = await get(ref(db, "korisnici"));
 
       if (!snapshot.exists()) {
-        alert("Нема корисника у бази.");
+        setErrorMessage("Нема регистрованих корисника.");
         return;
       }
 
@@ -42,9 +42,9 @@ const LoginModal = ({ isOpen, onClose, onSwitchToRegister }) => {
       );
 
       if (!pronadjeniKorisnik) {
-  setErrorMessage("Погрешно корисничко име или лозинка.");
-  return;
-}
+        setErrorMessage("Погрешно корисничко име или лозинка.");
+        return;
+      }
 
       const [korisnikId, korisnikPodaci] = pronadjeniKorisnik;
 
@@ -54,12 +54,11 @@ const LoginModal = ({ isOpen, onClose, onSwitchToRegister }) => {
         korisnikPodaci.korisnickoIme
       );
 
-      alert(`Добродошли, ${korisnikPodaci.ime}!`);
       onClose();
       window.location.reload();
     } catch (error) {
       console.log("Грешка при пријави:", error);
-      alert("Дошло је до грешке при пријави.");
+      setErrorMessage("Дошло је до грешке при пријави.");
     }
   };
 
@@ -67,18 +66,19 @@ const LoginModal = ({ isOpen, onClose, onSwitchToRegister }) => {
     <div className="login-modal-overlay" onClick={onClose}>
       <div className="login-modal-box" onClick={(e) => e.stopPropagation()}>
         <h2>Пријава</h2>
-        {errorMessage && (
-  <div className="custom-error-popup">
-    <span>{errorMessage}</span>
 
-    <button
-      type="button"
-      onClick={() => setErrorMessage("")}
-    >
-      ✕
-    </button>
-  </div>
-)}
+        {errorMessage && (
+          <div className="custom-error-popup">
+            <span>{errorMessage}</span>
+
+            <button
+              type="button"
+              onClick={() => setErrorMessage("")}
+            >
+              ✕
+            </button>
+          </div>
+        )}
 
         <form onSubmit={handleSubmit}>
           <input
@@ -112,7 +112,10 @@ const LoginModal = ({ isOpen, onClose, onSwitchToRegister }) => {
           <div className="register">
             <p>
               Немате профил?{" "}
-              <span className="register-link" onClick={onSwitchToRegister}>
+              <span
+                className="register-link"
+                onClick={onSwitchToRegister}
+              >
                 Региструјте се
               </span>
             </p>

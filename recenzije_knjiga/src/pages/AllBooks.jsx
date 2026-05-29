@@ -1,46 +1,77 @@
-import React from "react";
 import "./AllBooks.css";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { ref, get } from "firebase/database";
 import { db } from "../firebase";
 
-
 const AllBooks = () => {
   const [books, setBooks] = useState([]);
 
- useEffect(() => {
-  const fetchBooks = async () => {
-    try {
-      const booksSnapshot = await get(ref(db, "knjige"));
-      const authorsSnapshot = await get(ref(db, "autori"));
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedGenre, setSelectedGenre] = useState("Сви жанрови");
+  const [selectedFormat, setSelectedFormat] = useState("Сви формати");
+  const [selectedAuthor, setSelectedAuthor] = useState("Сви аутори");
 
-      if (booksSnapshot.exists() && authorsSnapshot.exists()) {
-        const booksData = booksSnapshot.val();
-        const authorsData = authorsSnapshot.val();
+  useEffect(() => {
+    const fetchBooks = async () => {
+      try {
+        const booksSnapshot = await get(ref(db, "knjige"));
+        const authorsSnapshot = await get(ref(db, "autori"));
 
-        const booksArray = Object.keys(booksData).map((key) => {
-          const book = booksData[key];
-          const author = authorsData[book.idAutora];
+        if (booksSnapshot.exists() && authorsSnapshot.exists()) {
+          const booksData = booksSnapshot.val();
+          const authorsData = authorsSnapshot.val();
 
-          return {
-            id: key,
-            ...book,
-            autorImePrezime: author
-              ? `${author.ime} ${author.prezime}`
-              : "Непознат аутор",
-          };
-        });
+          const booksArray = Object.keys(booksData).map((key) => {
+            const book = booksData[key];
+            const author = authorsData[book.idAutora];
 
-        setBooks(booksArray);
+            return {
+              id: key,
+              ...book,
+              autorImePrezime: author
+                ? `${author.ime} ${author.prezime}`
+                : "Непознат аутор",
+            };
+          });
+
+          setBooks(booksArray);
+        }
+      } catch (error) {
+        console.log("Greška pri učitavanju knjiga:", error);
       }
-    } catch (error) {
-      console.log("Greška pri učitavanju knjiga:", error);
-    }
-  };
+    };
 
-  fetchBooks();
-}, []);
+    fetchBooks();
+  }, []);
+
+  const genres = ["Сви жанрови", ...new Set(books.map((book) => book.zanr))];
+  const formats = ["Сви формати", ...new Set(books.map((book) => book.format))];
+  const authors = [
+    "Сви аутори",
+    ...new Set(books.map((book) => book.autorImePrezime)),
+  ];
+
+  const filteredBooks = books.filter((book) => {
+    const search = searchTerm.toLowerCase();
+
+    const matchesSearch =
+      book.naziv?.toLowerCase().includes(search) ||
+      book.autorImePrezime?.toLowerCase().includes(search) ||
+      book.isbn?.toLowerCase().includes(search);
+
+    const matchesGenre =
+      selectedGenre === "Сви жанрови" || book.zanr === selectedGenre;
+
+    const matchesFormat =
+      selectedFormat === "Сви формати" || book.format === selectedFormat;
+
+    const matchesAuthor =
+      selectedAuthor === "Сви аутори" ||
+      book.autorImePrezime === selectedAuthor;
+
+    return matchesSearch && matchesGenre && matchesFormat && matchesAuthor;
+  });
 
   return (
     <section className="allbooks">
@@ -56,52 +87,73 @@ const AllBooks = () => {
 
             <div className="filter-group">
               <label>Претрага</label>
-              <input type="text" placeholder="Назив, аутор, ISBN..." />
+              <input
+                type="text"
+                placeholder="Назив, аутор, ISBN..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
             </div>
 
             <div className="filter-group">
               <label>Жанр</label>
-              <select>
-                <option>Сви жанрови</option>
-                <option>Класик</option>
-                <option>Психолошки роман</option>
-                <option>Дистопија</option>
+              <select
+                value={selectedGenre}
+                onChange={(e) => setSelectedGenre(e.target.value)}
+              >
+                {genres.map((genre) => (
+                  <option key={genre}>{genre}</option>
+                ))}
               </select>
             </div>
 
             <div className="filter-group">
               <label>Формат</label>
-              <select>
-                <option>Сви формати</option>
-                <option>Тврди повез</option>
-                <option>Меки повез</option>
+              <select
+                value={selectedFormat}
+                onChange={(e) => setSelectedFormat(e.target.value)}
+              >
+                {formats.map((format) => (
+                  <option key={format}>{format}</option>
+                ))}
               </select>
             </div>
 
             <div className="filter-group">
               <label>Аутор</label>
-              <select>
-                <option>Сви аутори</option>
-                <option>Антуан де Сент-Екзупери</option>
-                <option>Фјодор Достојевски</option>
-                <option>Џорџ Орвел</option>
+              <select
+                value={selectedAuthor}
+                onChange={(e) => setSelectedAuthor(e.target.value)}
+              >
+                {authors.map((author) => (
+                  <option key={author}>{author}</option>
+                ))}
               </select>
             </div>
 
-            <button className="apply-btn" type="button">
-              Примени
+            <button
+              className="apply-btn"
+              type="button"
+              onClick={() => {
+                setSearchTerm("");
+                setSelectedGenre("Сви жанрови");
+                setSelectedFormat("Сви формати");
+                setSelectedAuthor("Сви аутори");
+              }}
+            >
+              Ресетуј
             </button>
           </aside>
 
           <div className="books-list">
-            {books.map((book) => (
+            {filteredBooks.map((book) => (
               <article className="book-row-card" key={book.id}>
                 <div className="book-row-image-wrap">
                   <img
-  src={book.slike?.[0]}
-  alt={book.naziv}
-  className="book-row-image"
-/>
+                    src={book.slike?.[0]}
+                    alt={book.naziv}
+                    className="book-row-image"
+                  />
                 </div>
 
                 <div className="book-row-content">
@@ -109,7 +161,9 @@ const AllBooks = () => {
                     <div>
                       <span className="book-row-tag">{book.zanr}</span>
                       <h2>{book.naziv}</h2>
-                      <p className="book-row-author">{book.autorImePrezime}</p>
+                      <p className="book-row-author">
+                        {book.autorImePrezime}
+                      </p>
                     </div>
 
                     <div className="book-row-rating">⭐ {book.rating}</div>
@@ -122,14 +176,17 @@ const AllBooks = () => {
                       <span>Формат</span>
                       <strong>{book.format}</strong>
                     </div>
+
                     <div className="meta-box">
                       <span>Цена</span>
                       <strong>{book.cena}</strong>
                     </div>
+
                     <div className="meta-box">
                       <span>Страна</span>
                       <strong>{book.brojStrana}</strong>
                     </div>
+
                     <div className="meta-box">
                       <span>ISBN</span>
                       <strong>{book.isbn}</strong>
@@ -138,13 +195,18 @@ const AllBooks = () => {
 
                   <div className="book-row-actions">
                     <Link to={`/book/${book.id}`} className="primary-book-btn">
-  Детаљи
-</Link>
+                      Детаљи
+                    </Link>
+
                     <button className="secondary-book-btn">Рецензије</button>
                   </div>
                 </div>
               </article>
             ))}
+
+            {filteredBooks.length === 0 && (
+              <p>Нема књига које одговарају изабраним филтерима.</p>
+            )}
           </div>
         </div>
       </div>

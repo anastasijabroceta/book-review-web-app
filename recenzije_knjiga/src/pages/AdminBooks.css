@@ -40,7 +40,26 @@
   gap: 16px;
   
 }
-
+.form-grid select{
+   width: 100%;
+  padding: 14px 16px;
+  border-radius: 14px;
+  border: 3px solid #dfd2c4;
+  background: #fcf8f4;
+  color: #5f4632;
+  font-size: 15px;
+  outline: none;
+}
+.form-grid textarea{
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: 14px;
+  border: 3px solid #dfd2c4;
+  background: #fcf8f4;
+  color: #5f4632;
+  font-size: 15px;
+  outline: none;
+}
 .form-grid input {
   width: 100%;
   padding: 14px 16px;

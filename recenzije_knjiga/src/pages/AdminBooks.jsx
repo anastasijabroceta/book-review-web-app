@@ -1,50 +1,65 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./AdminBooks.css";
-
-const initialBooks = [
-  {
-    id: 1,
-    title: "Ана Карењина",
-    author: "Лав Толстој",
-    genre: "Роман",
-    format: "Тврди повез",
-    price: "1290",
-    pages: "864",
-    isbn: "978-86-7543-555-2",
-  },
-  {
-    id: 2,
-    title: "Злочин и казна",
-    author: "Фјодор Достојевски",
-    genre: "Психолошки роман",
-    format: "Меки повез",
-    price: "1590",
-    pages: "528",
-    isbn: "9788675431234",
-  },
-];
+import { ref, get, set, remove, update } from "firebase/database";
+import { db } from "../firebase";
 
 const emptyForm = {
-  title: "",
-  author: "",
-  genre: "",
+  naziv: "",
+  idAutora: "",
+  zanr: "",
   format: "",
-  price: "",
-  pages: "",
+  cena: "",
+  brojStrana: "",
   isbn: "",
+  opis: "",
+  slike: "",
 };
 
 const AdminBooks = () => {
-  const [showModal, setShowModal] = useState(false);
-const [selectedId, setSelectedId] = useState(null);
-  
-  const [books, setBooks] = useState(initialBooks);
+  const [books, setBooks] = useState([]);
+  const [authors, setAuthors] = useState({});
   const [formData, setFormData] = useState(emptyForm);
   const [editingId, setEditingId] = useState(null);
   const [error, setError] = useState("");
+  const [showModal, setShowModal] = useState(false);
+  const [selectedId, setSelectedId] = useState(null);
+
+  useEffect(() => {
+    fetchBooksAndAuthors();
+  }, []);
+
+  const fetchBooksAndAuthors = async () => {
+    try {
+      const booksSnapshot = await get(ref(db, "knjige"));
+      const authorsSnapshot = await get(ref(db, "autori"));
+
+      const booksData = booksSnapshot.exists() ? booksSnapshot.val() : {};
+      const authorsData = authorsSnapshot.exists() ? authorsSnapshot.val() : {};
+
+      setAuthors(authorsData);
+
+      const booksArray = Object.keys(booksData).map((key) => {
+        const book = booksData[key];
+        const author = authorsData[book.idAutora];
+
+        return {
+          id: key,
+          ...book,
+          autorImePrezime: author
+            ? `${author.ime} ${author.prezime}`
+            : "Непознат аутор",
+        };
+      });
+
+      setBooks(booksArray);
+    } catch (error) {
+      console.log("Greška pri učitavanju knjiga:", error);
+    }
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+
     setFormData((prev) => ({
       ...prev,
       [name]: value,
@@ -56,7 +71,17 @@ const [selectedId, setSelectedId] = useState(null);
     return isbnRegex.test(isbn);
   };
 
-  const handleSubmit = (e) => {
+  const generateBookId = () => {
+    const numbers = books.map((book) =>
+      Number(book.id.replace("knj", ""))
+    );
+
+    const maxNumber = numbers.length > 0 ? Math.max(...numbers) : 0;
+
+    return `knj${String(maxNumber + 1).padStart(3, "0")}`;
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!validateISBN(formData.isbn)) {
@@ -64,47 +89,75 @@ const [selectedId, setSelectedId] = useState(null);
       return;
     }
 
-    setError("");
-
-    if (editingId !== null) {
-      setBooks((prev) =>
-        prev.map((book) =>
-          book.id === editingId ? { ...book, ...formData } : book
-        )
-      );
-      setEditingId(null);
-    } else {
-      const newBook = {
-        id: Date.now(),
-        ...formData,
-      };
-      setBooks((prev) => [...prev, newBook]);
+    if (!formData.idAutora) {
+      setError("Морате изабрати аутора.");
+      return;
     }
 
-    setFormData(emptyForm);
+    try {
+      setError("");
+
+      const bookData = {
+        naziv: formData.naziv,
+        idAutora: formData.idAutora,
+        zanr: formData.zanr,
+        format: formData.format,
+        cena: Number(formData.cena),
+        brojStrana: Number(formData.brojStrana),
+        isbn: formData.isbn,
+        opis: formData.opis,
+        slike: formData.slike
+          .split(",")
+          .map((url) => url.trim())
+          .filter((url) => url !== ""),
+      };
+
+      if (editingId) {
+        await update(ref(db, `knjige/${editingId}`), bookData);
+      } else {
+        const noviId = generateBookId();
+        await set(ref(db, `knjige/${noviId}`), bookData);
+      }
+
+      setFormData(emptyForm);
+      setEditingId(null);
+      fetchBooksAndAuthors();
+    } catch (error) {
+      console.log("Greška pri čuvanju knjige:", error);
+      setError("Дошло је до грешке при чувању књиге.");
+    }
   };
 
   const handleEdit = (book) => {
     setEditingId(book.id);
+
     setFormData({
-      title: book.title,
-      author: book.author,
-      genre: book.genre,
-      format: book.format,
-      price: book.price,
-      pages: book.pages,
-      isbn: book.isbn,
+      naziv: book.naziv || "",
+      idAutora: book.idAutora || "",
+      zanr: book.zanr || "",
+      format: book.format || "",
+      cena: book.cena || "",
+      brojStrana: book.brojStrana || "",
+      isbn: book.isbn || "",
+      opis: book.opis || "",
+      slike: book.slike ? book.slike.join(", ") : "",
     });
+
     setError("");
   };
 
-  const handleDelete = (id) => {
-    setBooks((prev) => prev.filter((book) => book.id !== id));
+  const handleDelete = async (id) => {
+    try {
+      await remove(ref(db, `knjige/${id}`));
 
-    if (editingId === id) {
+      setShowModal(false);
+      setSelectedId(null);
       setEditingId(null);
       setFormData(emptyForm);
-      setError("");
+
+      fetchBooksAndAuthors();
+    } catch (error) {
+      console.log("Greška pri brisanju knjige:", error);
     }
   };
 
@@ -116,179 +169,200 @@ const [selectedId, setSelectedId] = useState(null);
 
   return (
     <>
-    <section className="admin-books-page">
-      <div className="admin-books-container">
-        
-        <div className="admin-books-form-card">
-          <h2>{editingId !== null ? "Измени књигу" : "Додај нову књигу"}</h2>
+      <section className="admin-books-page">
+        <div className="admin-books-container">
+          <div className="admin-books-form-card">
+            <h2>{editingId ? "Измени књигу" : "Додај нову књигу"}</h2>
 
-          <form className="admin-books-form" onSubmit={handleSubmit}>
-            <div className="form-grid">
-              <input
-                type="text"
-                name="title"
-                placeholder="Назив"
-                value={formData.title}
-                onChange={handleChange}
-                required
-              />
+            <form className="admin-books-form" onSubmit={handleSubmit}>
+              <div className="form-grid">
+                <input
+                  type="text"
+                  name="naziv"
+                  placeholder="Назив"
+                  value={formData.naziv}
+                  onChange={handleChange}
+                  required
+                />
 
-              <input
-                type="text"
-                name="author"
-                placeholder="Аутор"
-                value={formData.author}
-                onChange={handleChange}
-                required
-              />
-
-              <input
-                type="text"
-                name="genre"
-                placeholder="Жанр"
-                value={formData.genre}
-                onChange={handleChange}
-                required
-              />
-
-              <input
-                type="text"
-                name="format"
-                placeholder="Формат"
-                value={formData.format}
-                onChange={handleChange}
-                required
-              />
-
-              <input
-                type="number"
-                name="price"
-                placeholder="Цена"
-                value={formData.price}
-                onChange={handleChange}
-                required
-              />
-
-              <input
-                type="number"
-                name="pages"
-                placeholder="Број страна"
-                value={formData.pages}
-                onChange={handleChange}
-                required
-              />
-
-              <input
-                type="text"
-                name="isbn"
-                placeholder="ISBN"
-                value={formData.isbn}
-                onChange={handleChange}
-                required
-              />
-            </div>
-
-            {error && <p className="form-error">{error}</p>}
-
-            <div className="form-actions">
-              <button type="submit" className="featured-more-btn-admin">
-                {editingId !== null ? "Сачувај измене" : "Додај књигу"}
-              </button>
-
-              {editingId !== null && (
-                <button
-                  type="button"
-                  className="cancel-btn"
-                  onClick={handleCancelEdit}
+                <select
+                  name="idAutora"
+                  value={formData.idAutora}
+                  onChange={handleChange}
+                  required
                 >
-                  Откажи
+                  <option value="">Изабери аутора</option>
+                  {Object.keys(authors).map((authorId) => (
+                    <option key={authorId} value={authorId}>
+                      {authors[authorId].ime} {authors[authorId].prezime}
+                    </option>
+                  ))}
+                </select>
+
+                <input
+                  type="text"
+                  name="zanr"
+                  placeholder="Жанр"
+                  value={formData.zanr}
+                  onChange={handleChange}
+                  required
+                />
+
+                <input
+                  type="text"
+                  name="format"
+                  placeholder="Формат"
+                  value={formData.format}
+                  onChange={handleChange}
+                  required
+                />
+
+                <input
+                  type="number"
+                  name="cena"
+                  placeholder="Цена"
+                  value={formData.cena}
+                  onChange={handleChange}
+                  required
+                />
+
+                <input
+                  type="number"
+                  name="brojStrana"
+                  placeholder="Број страна"
+                  value={formData.brojStrana}
+                  onChange={handleChange}
+                  required
+                />
+
+                <input
+                  type="text"
+                  name="isbn"
+                  placeholder="ISBN"
+                  value={formData.isbn}
+                  onChange={handleChange}
+                  required
+                />
+
+                <input
+                  type="text"
+                  name="slike"
+                  placeholder="URL слике, више URL-ова одвојити зарезом"
+                  value={formData.slike}
+                  onChange={handleChange}
+                />
+
+                <textarea
+                  name="opis"
+                  placeholder="Опис"
+                  value={formData.opis}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+
+              {error && <p className="form-error">{error}</p>}
+
+              <div className="form-actions">
+                <button type="submit" className="featured-more-btn-admin">
+                  {editingId ? "Сачувај измене" : "Додај књигу"}
                 </button>
-              )}
-            </div>
-          </form>
-        </div>
 
-        <div className="admin-books-table-card">
-          <h2>Све књиге</h2>
+                {editingId && (
+                  <button
+                    type="button"
+                    className="cancel-btn"
+                    onClick={handleCancelEdit}
+                  >
+                    Откажи
+                  </button>
+                )}
+              </div>
+            </form>
+          </div>
 
-          <div className="table-wrapper">
-            <table className="admin-books-table">
-              <thead>
-                <tr>
-                  <th>Назив</th>
-                  <th>Аутор</th>
-                  <th>Жанр</th>
-                  <th>Формат</th>
-                  <th>Цена</th>
-                  <th>Страна</th>
-                  <th>ISBN</th>
-                  <th>Акције</th>
-                </tr>
-              </thead>
+          <div className="admin-books-table-card">
+            <h2>Све књиге</h2>
 
-              <tbody>
-                {books.map((book) => (
-                  <tr key={book.id}>
-                    <td data-label="Назив">{book.title}</td>
-                    <td data-label="Аутор">{book.author}</td>
-                    <td data-label="Жанр">{book.genre}</td>
-                    <td data-label="Формат">{book.format}</td>
-                    <td data-label="Цена">{book.price}</td>
-                    <td data-label="Страна">{book.pages}</td>
-                    <td data-label="ISBN">{book.isbn}</td>
-                    <td data-label="Акције" className="actions-cell">
-                      <button
-                        className="edit-btn"
-                        onClick={() => handleEdit(book)}
-                      >
-                        Измени
-                      </button>
-
-                     <button
-  className="delete-btn"
-  onClick={() => {
-    setSelectedId(book.id);
-    setShowModal(true);
-  }}
->
-  Обриши
-</button>
-                    </td>
+            <div className="table-wrapper">
+              <table className="admin-books-table">
+                <thead>
+                  <tr>
+                    <th>Назив</th>
+                    <th>Аутор</th>
+                    <th>Жанр</th>
+                    <th>Формат</th>
+                    <th>Цена</th>
+                    <th>Страна</th>
+                    <th>ISBN</th>
+                    <th>Акције</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+
+                <tbody>
+                  {books.map((book) => (
+                    <tr key={book.id}>
+                      <td data-label="Назив">{book.naziv}</td>
+                      <td data-label="Аутор">{book.autorImePrezime}</td>
+                      <td data-label="Жанр">{book.zanr}</td>
+                      <td data-label="Формат">{book.format}</td>
+                      <td data-label="Цена">{book.cena}</td>
+                      <td data-label="Страна">{book.brojStrana}</td>
+                      <td data-label="ISBN">{book.isbn}</td>
+                      <td data-label="Акције" className="actions-cell">
+                        <button
+                          className="edit-btn"
+                          onClick={() => handleEdit(book)}
+                        >
+                          Измени
+                        </button>
+
+                        <button
+                          className="delete-btn"
+                          onClick={() => {
+                            setSelectedId(book.id);
+                            setShowModal(true);
+                          }}
+                        >
+                          Обриши
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+
+                  {books.length === 0 && (
+                    <tr>
+                      <td colSpan="8">Нема књига у бази.</td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
-      </div>
-    </section>
-    {showModal && (
-  <div className="confirm-modal-overlay">
-    <div className="confirm-modal-box">
-      <p>Да ли си сте сигурни да желите да обришете књигу?</p>
+      </section>
 
-      <button
-        onClick={() => {
-          handleDelete(selectedId);
-          setShowModal(false);
-          setSelectedId(null);
-        }}
-      >
-        Да
-      </button>
+      {showModal && (
+        <div className="confirm-modal-overlay">
+          <div className="confirm-modal-box">
+            <p>Да ли сте сигурни да желите да обришете књигу?</p>
 
-      <button
-        onClick={() => {
-          setShowModal(false);
-          setSelectedId(null);
-        }}
-      >
-        Не
-      </button>
-    </div>
-  </div>
-)}
-  </>
+            <button onClick={() => handleDelete(selectedId)}>
+              Да
+            </button>
+
+            <button
+              onClick={() => {
+                setShowModal(false);
+                setSelectedId(null);
+              }}
+            >
+              Не
+            </button>
+          </div>
+        </div>
+      )}
+    </>
   );
 };
 

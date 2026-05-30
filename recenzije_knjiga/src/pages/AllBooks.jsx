@@ -46,11 +46,39 @@ const AllBooks = () => {
   }, []);
 
   const genres = ["Сви жанрови", ...new Set(books.map((book) => book.zanr))];
-  const formats = ["Сви формати", ...new Set(books.map((book) => book.format))];
+
+  const formats = [
+    "Сви формати",
+    ...new Set(books.map((book) => book.format)),
+  ];
+
   const authors = [
     "Сви аутори",
     ...new Set(books.map((book) => book.autorImePrezime)),
   ];
+
+  const highlightText = (text) => {
+    if (!searchTerm.trim() || !text) return text;
+
+    const escapedSearch = searchTerm.replace(
+      /[.*+?^${}()|[\]\\]/g,
+      "\\$&"
+    );
+
+    const regex = new RegExp(`(${escapedSearch})`, "gi");
+
+    return String(text)
+      .split(regex)
+      .map((part, index) =>
+        part.toLowerCase() === searchTerm.toLowerCase() ? (
+          <mark className="search-highlight" key={index}>
+            {part}
+          </mark>
+        ) : (
+          part
+        )
+      );
+  };
 
   const filteredBooks = books.filter((book) => {
     const search = searchTerm.toLowerCase();
@@ -58,7 +86,8 @@ const AllBooks = () => {
     const matchesSearch =
       book.naziv?.toLowerCase().includes(search) ||
       book.autorImePrezime?.toLowerCase().includes(search) ||
-      book.isbn?.toLowerCase().includes(search);
+      book.isbn?.toLowerCase().includes(search) ||
+      book.opis?.toLowerCase().includes(search);
 
     const matchesGenre =
       selectedGenre === "Сви жанрови" || book.zanr === selectedGenre;
@@ -160,16 +189,20 @@ const AllBooks = () => {
                   <div className="book-row-top">
                     <div>
                       <span className="book-row-tag">{book.zanr}</span>
-                      <h2>{book.naziv}</h2>
+
+                      <h2>{highlightText(book.naziv)}</h2>
+
                       <p className="book-row-author">
-                        {book.autorImePrezime}
+                        {highlightText(book.autorImePrezime)}
                       </p>
                     </div>
 
                     <div className="book-row-rating">⭐ {book.rating}</div>
                   </div>
 
-                  <p className="book-row-description">{book.opis}</p>
+                  <p className="book-row-description">
+                    {highlightText(book.opis)}
+                  </p>
 
                   <div className="book-row-meta">
                     <div className="meta-box">
@@ -189,7 +222,7 @@ const AllBooks = () => {
 
                     <div className="meta-box">
                       <span>ISBN</span>
-                      <strong>{book.isbn}</strong>
+                      <strong>{highlightText(book.isbn)}</strong>
                     </div>
                   </div>
 

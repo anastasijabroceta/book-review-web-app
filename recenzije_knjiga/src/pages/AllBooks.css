@@ -345,3 +345,10 @@
     flex-direction: column;
   }
 }
+.search-highlight {
+  background: #ffe08a;
+  color: #2f241d;
+  padding: 0 4px;
+  border-radius: 5px;
+  font-weight: 700;
+}

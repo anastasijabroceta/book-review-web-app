@@ -3,28 +3,31 @@ import "./AdminBooks.css";
 import { ref, get, push, update, remove } from "firebase/database"; 
 import { db } from "../firebase"; 
 
+const emptyForm = {
+  ime: "", 
+  prezime: "", 
+  status: "Активан", // Podrazumevana vrednost za padajući meni
+  datumRodjenja: "", 
+  brojOsvojenihNagrada: "", 
+  brojProdatihPrimeraka: "", 
+  kontaktTelefonMenadzera: "", 
+  biografija: "", 
+  slike: "" 
+};
+
 const AdminAuthors = () => {
   const [authors, setAuthors] = useState([]);
-  
-  // ISPRAVLJENO: Dodata su polja 'biografija' i 'brojProdatihPrimeraka'
-  const [formData, setFormData] = useState({ 
-    ime: "", 
-    prezime: "", 
-    status: "", 
-    datumRodjenja: "", 
-    brojOsvojenihNagrada: "", 
-    brojProdatihPrimeraka: "", 
-    kontaktTelefonMenadzera: "", 
-    biografija: "", 
-    slike: "" 
-  });
-  
+  const [formData, setFormData] = useState(emptyForm);
   const [editingId, setEditingId] = useState(null);
+  const [error, setError] = useState(""); 
   const [showModal, setShowModal] = useState(false);
   const [selectedId, setSelectedId] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // 1. READ: Učitavanje autora iz Firebase-a
+  useEffect(() => {
+    fetchAuthors();
+  }, []);
+
   const fetchAuthors = async () => {
     try {
       const snapshot = await get(ref(db, "autori"));
@@ -45,58 +48,134 @@ const AdminAuthors = () => {
     }
   };
 
-  useEffect(() => {
-    fetchAuthors();
-  }, []);
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
 
-  // 2. CREATE & UPDATE: Čuvanje podataka
+  // Validacija telefona menadžera iz specifikacije
+  const validatePhone = (phone) => {
+    const phoneRegex = /^\+381\s\d{2}\s\d{3,4}-\d{3}$/;
+    return phoneRegex.test(phone);
+  };
+
+  // Validacija za ćirilicu i veliko početno slovo
+  const validateCyrillicName = (name) => {
+    // Dozvoljava samo jedno veliko ćirilično slovo na početku i mala ćirilična slova u nastavku
+    const cyrillicRegex = /^[А-Ш][а-шђјљљњћџћ]+$/;
+    return cyrillicRegex.test(name);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // 1. Validacija imena (Samo ćirilica i veliko početno slovo)
+    if (!validateCyrillicName(formData.ime.trim())) {
+      setError("Име мора бити написано ћирилицом, почети великим словом и садржати само слова.");
+      return;
+    }
+
+    // 2. Validacija prezimena (Samo ćirilica i veliko početno slovo)
+    if (!validateCyrillicName(formData.prezime.trim())) {
+      setError("Презиме мора бити написано ћирилицом, почети великим словом и садржати само слова.");
+      return;
+    }
+
+    // 3. RegEx Validacija datuma (format GGGG-MM-DD)
+    const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+    if (!dateRegex.test(formData.datumRodjenja)) {
+      setError("Датум рођења мора бити у формату ГГГГ-ММ-ДД (нпр. 1950-05-25).");
+      return;
+    }
+
+    // 4. Validacija brojčanih polja (da nisu negativni)
+    if (Number(formData.brojOsvojenihNagrada) < 0) {
+      setError("Број освојених награда не може бити негативан број.");
+      return;
+    }
+    if (Number(formData.brojProdatihPrimeraka) < 0) {
+      setError("Број продатих примерака не може бити негативан број.");
+      return;
+    }
+
+    // 5. RegEx Validacija telefona menadžera
+    if (formData.kontaktTelefonMenadzera && !validatePhone(formData.kontaktTelefonMenadzera)) {
+      setError("Формат телефона мора бити: +381 XX XXX-XXXX (нпр. +381 64 123-4567).");
+      return;
+    }
+
+    // 6. Validacija biografije (da nije prazna ili samo razmaci)
+    if (!formData.biografija.trim()) {
+      setError("Биографија аутора је обавезна.");
+      return;
+    }
+
     try {
-      // Sva brojčana polja pretvaramo u Number, a sliku pakujemo u niz kako baza zahteva
-      const podatkeZaSlanje = {
-        ...formData,
+      setError("");
+
+      const authorData = {
+        ime: formData.ime.trim(),
+        prezime: formData.prezime.trim(),
+        status: formData.status,
+        datumRodjenja: formData.datumRodjenja,
         brojOsvojenihNagrada: Number(formData.brojOsvojenihNagrada || 0),
         brojProdatihPrimeraka: Number(formData.brojProdatihPrimeraka || 0),
-        slike: formData.slike ? [formData.slike] : [""] 
+        kontaktTelefonMenadzera: formData.kontaktTelefonMenadzera,
+        biografija: formData.biografija.trim(),
+        slike: formData.slike ? [formData.slike.trim()] : [""]
       };
 
       if (editingId) {
-        await update(ref(db, `autori/${editingId}`), podatkeZaSlanje);
+        await update(ref(db, `autori/${editingId}`), authorData);
         setEditingId(null);
       } else {
-        await push(ref(db, "autori"), podatkeZaSlanje);
+        await push(ref(db, "autori"), authorData);
       }
       
-      // Resetovanje svih polja forme
-      setFormData({ 
-        ime: "", 
-        prezime: "", 
-        status: "", 
-        datumRodjenja: "", 
-        brojOsvojenihNagrada: "", 
-        brojProdatihPrimeraka: "", 
-        kontaktTelefonMenadzera: "", 
-        biografija: "", 
-        slike: "" 
-      });
+      setFormData(emptyForm);
       fetchAuthors();
     } catch (error) {
       console.log("Greška pri čuvanju podataka:", error);
+      setError("Дошло је до грешке при чувању аутора.");
     }
   };
 
-  // 3. DELETE: Brisanje autora
-  const handleDelete = async () => {
-    if (!selectedId) return;
+  const handleEdit = (author) => {
+    setEditingId(author.id);
+    setFormData({
+      ime: author.ime || "",
+      prezime: author.prezime || "",
+      status: author.status || "Активан",
+      datumRodjenja: author.datumRodjenja || "",
+      brojOsvojenihNagrada: author.brojOsvojenihNagrada || "",
+      brojProdatihPrimeraka: author.brojProdatihPrimeraka || "",
+      kontaktTelefonMenadzera: author.kontaktTelefonMenadzera || "",
+      biografija: author.biografija || "",
+      slike: Array.isArray(author.slike) ? author.slike[0] : (author.slike || "")
+    });
+    setError("");
+  };
+
+  const handleDelete = async (id) => {
     try {
-      await remove(ref(db, `autori/${selectedId}`));
+      await remove(ref(db, `autori/${id}`));
       setShowModal(false);
       setSelectedId(null);
+      setEditingId(null);
+      setFormData(emptyForm);
       fetchAuthors(); 
     } catch (error) {
       console.log("Greška pri brisanju autora:", error);
     }
+  };
+
+  const handleCancelEdit = () => {
+    setEditingId(null);
+    setFormData(emptyForm);
+    setError("");
   };
 
   if (loading) {
@@ -104,149 +183,165 @@ const AdminAuthors = () => {
   }
 
   return (
-    <div className="admin-books-page">
-      <div className="admin-books-container">
+    <>
+      <section className="admin-books-page">
+        <div className="admin-books-container">
+          <div className="admin-books-form-card">
+            <h2>{editingId ? "Измени аутора" : "Додај новог аутора"}</h2>
+            
+            <form className="admin-books-form" onSubmit={handleSubmit}>
+              <div className="form-grid">
+                <input 
+                  type="text" 
+                  name="ime"
+                  placeholder="Име (Ћирилица, велико слово)" 
+                  value={formData.ime} 
+                  onChange={handleChange} 
+                  required 
+                />
+                <input 
+                  type="text" 
+                  name="prezime"
+                  placeholder="Презиме (Ћирилица, велико слово)" 
+                  value={formData.prezime} 
+                  onChange={handleChange} 
+                  required 
+                />
+                
+                {/* ISPRAVLJENO: Padajući meni umesto običnog input polja */}
+                <select 
+                  name="status"
+                  value={formData.status} 
+                  onChange={handleChange} 
+                  required
+                >
+                  <option value="Активан">Активан</option>
+                  <option value="Преминуо">Преминуо</option>
+                </select>
 
-        <div className="admin-books-form-card">
-          <h2>{editingId ? "Измени податке аутора" : "Додај новог аутора"}</h2>
-          <form className="admin-books-form" onSubmit={handleSubmit}>
-            <div className="form-grid">
-              <input 
-                type="text" 
-                placeholder="Име" 
-                value={formData.ime} 
-                onChange={e => setFormData({...formData, ime: e.target.value})} 
-                required 
-              />
-              <input 
-                type="text" 
-                placeholder="Презиме" 
-                value={formData.prezime} 
-                onChange={e => setFormData({...formData, prezime: e.target.value})} 
-                required 
-              />
-              <input 
-                type="text" 
-                placeholder="Статус (Активан / Преминуо)" 
-                value={formData.status} 
-                onChange={e => setFormData({...formData, status: e.target.value})} 
-                required 
-              />
-              <input 
-                type="text" 
-                placeholder="Датум рођења (ГГГГ-ММ-ДД)" 
-                value={formData.datumRodjenja} 
-                onChange={e => setFormData({...formData, datumRodjenja: e.target.value})} 
-                required 
-              />
-              <input 
-                type="number" 
-                placeholder="Број награда" 
-                value={formData.brojOsvojenihNagrada} 
-                onChange={e => setFormData({...formData, brojOsvojenihNagrada: e.target.value})} 
-                required 
-              />
-              {/* NOVO POLJE: Broj prodatih primeraka */}
-              <input 
-                type="number" 
-                placeholder="Број продатих примерака" 
-                value={formData.brojProdatihPrimeraka} 
-                onChange={e => setFormData({...formData, brojProdatihPrimeraka: e.target.value})} 
-                required 
-              />
-              <input 
-                type="text" 
-                placeholder="Телефон менаџера" 
-                value={formData.kontaktTelefonMenadzera} 
-                onChange={e => setFormData({...formData, kontaktTelefonMenadzera: e.target.value})} 
-              />
-              <input 
-                type="text" 
-                placeholder="Линк do слике аутора (URL)" 
-                value={formData.slike} 
-                onChange={e => setFormData({...formData, slike: e.target.value})} 
-              />
-            </div>
+                <input 
+                  type="text" 
+                  name="datumRodjenja"
+                  placeholder="Датум рођења (ГГГГ-ММ-ДД)" 
+                  value={formData.datumRodjenja} 
+                  onChange={handleChange} 
+                  required 
+                />
+                <input 
+                  type="number" 
+                  name="brojOsvojenihNagrada"
+                  placeholder="Број награда" 
+                  value={formData.brojOsvojenihNagrada} 
+                  onChange={handleChange} 
+                  required 
+                />
+                <input 
+                  type="number" 
+                  name="brojProdatihPrimeraka"
+                  placeholder="Број продатих примерака" 
+                  value={formData.brojProdatihPrimeraka} 
+                  onChange={handleChange} 
+                  required 
+                />
+                <input 
+                  type="text" 
+                  name="kontaktTelefonMenadzera"
+                  placeholder="Телефон менаџера" 
+                  value={formData.kontaktTelefonMenadzera} 
+                  onChange={handleChange} 
+                  required
+                />
+                <input 
+                  type="text" 
+                  name="slike"
+                  placeholder="Линк до слике аутора (URL)" 
+                  value={formData.slike} 
+                  onChange={handleChange} 
+                />
+              </div>
 
-            {/* NOVO POLJE: Biografija u vidu textarea za lakši unos dužeg teksta */}
-            <div style={{ marginTop: "15px" }}>
-              <textarea 
-                placeholder="Биографија аутора..." 
-                value={formData.biografija} 
-                onChange={e => setFormData({...formData, biografija: e.target.value})}
-                style={{ width: "100%", minHeight: "100px", padding: "10px", borderRadius: "8px", border: "1px solid #ccc", fontFamily: "inherit" }}
-                required
-              />
-            </div>
+              <div style={{ marginTop: "15px" }}>
+                <textarea 
+                  name="biografija"
+                  placeholder="Биографија аутора..." 
+                  value={formData.biografija} 
+                  onChange={handleChange}
+                  style={{ width: "100%", minHeight: "100px", padding: "10px", borderRadius: "8px", border: "1px solid #ccc", fontFamily: "inherit" }}
+                  required
+                />
+              </div>
 
-            <div className="form-actions">
-              <button type="submit" className="featured-more-btn-admin">
-                {editingId ? "Сачувај измене" : "Додај аутора"}
-              </button>
+              {error && <p className="form-error">{error}</p>}
+
+              <div className="form-actions">
+                <button type="submit" className="featured-more-btn-admin">
+                  {editingId ? "Сачувај измене" : "Додај аутора"}
+                </button>
+                {editingId && (
+                  <button type="button" className="cancel-btn" onClick={handleCancelEdit}>
+                    Откажи
+                  </button>
+                )}
+              </div>
+            </form>
+          </div>
+
+          <div className="admin-books-table-card">
+            <h2>Листа аутора</h2>
+            <div className="table-wrapper">
+              <table className="admin-books-table">
+                <thead>
+                  <tr>
+                    <th>Аутор</th>
+                    <th>Статус</th>
+                    <th>Рођен</th>
+                    <th>Награде</th>
+                    <th>Продато примерака</th>
+                    <th>Контакт</th>
+                    <th>Акције</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {authors.map(a => (
+                    <tr key={a.id}>
+                      <td>{a.ime} {a.prezime}</td>
+                      <td>{a.status}</td>
+                      <td>{a.datumRodjenja}</td>
+                      <td>{a.brojOsvojenihNagrada}</td>
+                      <td>{Number(a.brojProdatihPrimeraka || 0).toLocaleString()}</td>
+                      <td>{a.kontaktTelefonMenadzera || "/"}</td> 
+                      <td className="actions-cell">
+                        <button className="edit-btn" onClick={() => handleEdit(a)}>
+                          Измени
+                        </button>
+                        <button className="delete-btn" onClick={() => { setSelectedId(a.id); setShowModal(true); }}>
+                          Обриши
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                  {authors.length === 0 && (
+                    <tr>
+                      <td colSpan="7">Нема аутора у бази.</td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
             </div>
-          </form>
+          </div>
         </div>
-      </div>
-
-      <div className="admin-books-table-card">
-        <h2>Листа аутора</h2>
-        <div className="table-wrapper">
-          <table className="admin-books-table">
-            <thead>
-              <tr>
-                <th>Аутор</th>
-                <th>Статус</th>
-                <th>Рођен</th>
-                <th>Награде</th>
-                <th>Продато примерака</th>
-                <th>Контакт</th>
-                <th>Акције</th>
-              </tr>
-            </thead>
-            <tbody>
-              {authors.map(a => (
-                <tr key={a.id}>
-                  <td>{a.ime} {a.prezime}</td>
-                  <td>{a.status}</td>
-                  <td>{a.datumRodjenja}</td>
-                  <td>{a.brojOsvojenihNagrada}</td>
-                  {/* Prikaz novog polja u tabeli */}
-                  <td>{Number(a.brojProdatihPrimeraka || 0).toLocaleString()}</td>
-                  <td>{a.kontaktTelefonMenadzera || "/"}</td> 
-                  <td className="actions-cell">
-                    <button className="edit-btn" onClick={() => { 
-                      setEditingId(a.id); 
-                      setFormData({ 
-                        ime: a.ime || "", 
-                        prezime: a.prezime || "", 
-                        status: a.status || "", 
-                        datumRodjenja: a.datumRodjenja || "", 
-                        brojOsvojenihNagrada: a.brojOsvojenihNagrada || 0, 
-                        brojProdatihPrimeraka: a.brojProdatihPrimeraka || 0, 
-                        kontaktTelefonMenadzera: a.kontaktTelefonMenadzera || "", 
-                        biografija: a.biografija || "", 
-                        slike: Array.isArray(a.slike) ? a.slike[0] : (a.slike || "") 
-                      }); 
-                    }}>Измени</button>
-                    <button className="delete-btn" onClick={() => { setSelectedId(a.id); setShowModal(true); }}>Обриши</button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
+      </section>
 
       {showModal && (
         <div className="confirm-modal-overlay">
           <div className="confirm-modal-box">
-            <p>Сигурни сте да желите обрисати аутора?</p>
-            <button onClick={handleDelete}>Да</button>
+            <p>Да ли сте сигурни да желите да обришете аутора?</p>
+            <button onClick={() => handleDelete(selectedId)}>Да</button>
             <button onClick={() => { setShowModal(false); setSelectedId(null); }}>Не</button>
           </div>
         </div>
       )}
-    </div>
+    </>
   );
 };
 

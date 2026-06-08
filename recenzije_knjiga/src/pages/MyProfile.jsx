@@ -14,6 +14,9 @@ const MyProfile = () => {
   const handleLogout = () => {
     localStorage.removeItem("ulogovaniKorisnikId");
     localStorage.removeItem("ulogovaniKorisnickoIme");
+    // Dodajemo i ove za svaki slučaj ako smo ih postavili na drugim stranicama
+    localStorage.removeItem("ulogovaniKorisnik");
+    localStorage.removeItem("user");
 
     window.location.href = "/";
   };
@@ -207,7 +210,7 @@ const MyProfile = () => {
               </section>
             )}
 
-            {activeTab === "ratings" && <MyRatings />}
+            {activeTab === "ratings" && <MyRatings korisnikId={user.id} />}
           </div>
 
           <div className="logout-divider">

@@ -1,109 +1,166 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import './AuthorDetails.css';
-import img1 from "../assets/mesa_selimovic.jpg";
-import img2 from "../assets/ivo_andric.jpg";
-import img3 from "../assets/nenad_gugl.jpg";
-import img4 from "../assets/milos_crnjanski.jpg";
-import img5 from "../assets/desanka_maksimovic.jpg";
-import img6 from "../assets/borislav_pekic.jpg";
-
-const authorsData = [
-  { 
-    id: 1, 
-    name: "Меша", 
-    surname: "Селимовић", 
-    status: "Преминуо", 
-    mainQuote: "Човјек је несавршено биће, а све што он створи, носи печат његове несавршености.",
-    bio: "Меша Селимовић је био истакнути југословенски писац. Његов роман 'Дервиш i смрт' један је од најзначајнијих књижевних дела на овим просторима. Кроз своје ликове, Селимовић истражује дубоке унутрашње сукобе, питања вере, власти и људске етике у тешким историјским временима.", 
-    birthDate: "26. април 1910.", 
-    awards: 12, 
-    soldCopies: "5.000.000+", 
-    managerPhone: "+381 60 123-4567", 
-    image: img1, 
-    books: [{ id: '101', title: 'Дервиш и смрт' }, { id: '102', title: 'Тврђава' }], 
-    averageRating: 4.8 
-  },
-  { 
-    id: 2, 
-    name: "Иво", 
-    surname: "Андрић", 
-    status: "Преминуо", 
-    mainQuote: "Све су Дрине овог свијета криве; никада се оне неће моћи потпуно исправити, али никада не смијемо престати да их исправљамо.",
-    bio: "Једини југословенски добитник Нобелове награде за књижевност. Његова дела попут 'На Дрини ћуприја' приказала су историју Балкана, преплитање култура и судбине људи кроз векове на овим просторима.", 
-    birthDate: "9. октобар 1892.", 
-    awards: 24, 
-    soldCopies: "10.000.000+", 
-    managerPhone: "+381 61 222-3333", 
-    image: img2, 
-    books: [{ id: '201', title: 'На Дрини ћуприја' }, { id: '202', title: 'Проклета авлија' }], 
-    averageRating: 4.9 
-  },
-  { 
-    id: 3, 
-    name: "Ненад", 
-    surname: "Гугл", 
-    status: "Активан", 
-    mainQuote: "Живот се не мери бројем удаха које направимо, већ тренуцима који нам одузимају дах.",
-    bio: "Савремени српски писац и професор који својим делима 'Умро сам у петак' и 'Велелепота секунде' инспирише младе генерације да истражују дубљи смисао живота и духовности.", 
-    birthDate: "1982.", 
-    awards: 8, 
-    soldCopies: "100.000+", 
-    managerPhone: "+381 63 444-5555", 
-    image: img3, 
-    books: [{ id: '301', title: 'Умро сам у петак' }, { id: '302', title: 'Велелепота секунде' }], 
-    averageRating: 4.7 
-  },
-  { 
-    id: 4, 
-    name: "Милош", 
-    surname: "Црњански", 
-    status: "Преминуо", 
-    mainQuote: "Бескрајни плави круг. У њему, звезда.",
-    bio: "Један од најзначајнијих стваралаца српске књижевности 20. века. Песник, приповедач и романсијер који је увео модернизам у нашу литературу кроз дела као што су 'Сеобе'.", 
-    birthDate: "26. октобар 1893.", 
-    awards: 15, 
-    soldCopies: "3.000.000+", 
-    managerPhone: "+381 64 666-7777", 
-    image: img4, 
-    books: [{ id: '401', title: 'Сеобе' }, { id: '402', title: 'Роман о Лондону' }], 
-    averageRating: 4.8 
-  },
-  { 
-    id: 5, 
-    name: "Десанка", 
-    surname: "Максимовић", 
-    status: "Преминуо", 
-    mainQuote: "Не, немој ми прићи! Хоћу из далека да волим и желим ока твоја два.",
-    bio: "Најомиљенија српска песникиња чији су стихови обележили детињство и младост многих генерација. Њена поезија одише љубављу, родољубљем и дубоком хуманошћу.", 
-    birthDate: "16. мај 1898.", 
-    awards: 40, 
-    soldCopies: "8.000.000+", 
-    managerPhone: "+381 65 888-9999", 
-    image: img5, 
-    books: [{ id: '501', title: 'Тражим помиловање' }, { id: '502', title: 'Крвава бајка' }], 
-    averageRating: 5.0 
-  },
-  { 
-    id: 6, 
-    name: "Борислав", 
-    surname: "Пекић", 
-    status: "Преминуо", 
-    mainQuote: "Треба гледати право. Јер да се требало гледати иза себе, добили бисмо очи на потиљку.",
-    bio: "Један од најважнијих писаца модерне српске књижевности. Његов опус обухвата монументалне романе који истражују историју, политику и судбину појединца у заједници.", 
-    birthDate: "4. фебруар 1930.", 
-    awards: 18, 
-    soldCopies: "2.500.000+", 
-    managerPhone: "+381 69 000-1111", 
-    image: img6, 
-    books: [{ id: '601', title: 'Беснило' }, { id: '602', title: 'Златно руно' }], 
-    averageRating: 4.9 
-  }
-];
+import { ref, get, push, set } from "firebase/database"; 
+import { db } from "../firebase"; 
 
 const AuthorDetails = () => {
-  const { id } = useParams();
-  const author = authorsData.find(a => a.id === parseInt(id));
+  const { id } = useParams(); 
+  const [author, setAuthor] = useState(null);
+  const [authorBooks, setAuthorBooks] = useState([]); // Držaćemo knjige ovog autora
+  const [loading, setLoading] = useState(true);
+
+  // --- STATE-OVI ZA OCENE I STATUS ---
+  const [prosecnaOcena, setProsecnaOcena] = useState("0.0");
+  const [izabranaOcena, setIzabranaOcena] = useState(0); // Ocena koju korisnik klikne (1-5)
+  const [hoverOcena, setHoverOcena] = useState(0); // Za efekat prelaza mišem preko zvezdica
+  const [ulogovaniKorisnik, setUlogovaniKorisnik] = useState(null);
+  const [porukaOcenjivanja, setPorukaOcenjivanja] = useState(""); // Za elegantan ispis poruke
+
+  // Funkcija koja povlači sve podatke i računa prosek ocena
+  const fetchAllDetails = async () => {
+    try {
+      // 1. Povlačimo podatke o konkretnom autoru
+      const authorSnapshot = await get(ref(db, `autori/${id}`));
+      
+      // 2. Povlačimo sve knjige iz baze radi relacije
+      const booksSnapshot = await get(ref(db, "knjige"));
+
+      // 3. Povlačimo sve ocene iz baze
+      const ratingsSnapshot = await get(ref(db, "ocene"));
+
+      if (authorSnapshot.exists()) {
+        setAuthor({
+          id: id,
+          ...authorSnapshot.val()
+        });
+      }
+
+      if (booksSnapshot.exists() && authorSnapshot.exists()) {
+        const allBooks = booksSnapshot.val();
+        
+        // Pomoćna logika: Čistimo ID autora tako da ostanu samo cifre (npr. "aut001" postaje "1")
+        const cistIdAutora = id.replace(/\D/g, ""); 
+
+        // Filtriramo knjige: pokrivamo situaciju ako je idAutora sa "aut" ili samo čist broj
+        const filteredBooks = Object.keys(allBooks)
+          .map(key => ({ id: key, ...allBooks[key] }))
+          .filter(book => {
+            if (!book.idAutora) return false;
+            const cistBookIdAutora = String(book.idAutora).replace(/\D/g, "");
+            return book.idAutora === id || cistBookIdAutora === cistIdAutora;
+          });
+        
+        setAuthorBooks(filteredBooks);
+      }
+
+      // 4. Dinamičko računanje prosečne ocene
+      if (ratingsSnapshot.exists()) {
+        const allRatings = ratingsSnapshot.val();
+        const cistIdAutora = id.replace(/\D/g, "");
+
+        const filteredRatings = Object.values(allRatings).filter(rating => {
+          if (!rating.idAutora) return false;
+          const cistRatingIdAutora = String(rating.idAutora).replace(/\D/g, "");
+          return rating.idAutora === id || cistRatingIdAutora === cistIdAutora;
+        });
+
+        if (filteredRatings.length > 0) {
+          const suma = filteredRatings.reduce((sum, curr) => sum + Number(curr.vrednost), 0);
+          const prosek = (suma / filteredRatings.length).toFixed(1);
+          setProsecnaOcena(prosek);
+        } else {
+          setProsecnaOcena("0.0");
+        }
+      } else {
+        setProsecnaOcena("0.0");
+      }
+
+    } catch (error) {
+      console.log("Greška pri učitavanju detalja autora:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    const proveriLogin = () => {
+      const ulogovan = localStorage.getItem("ulogovaniKorisnik") || localStorage.getItem("user") || localStorage.getItem("korisnik");
+      if (ulogovan) {
+        try {
+          setUlogovaniKorisnik(JSON.parse(ulogovan));
+        } catch (e) {
+          setUlogovaniKorisnik(null);
+        }
+      }
+    };
+
+    if (id) {
+      fetchAllDetails();
+      proveriLogin();
+    }
+  }, [id]);
+
+  // Funkcija za slanje nove ocene u bazu podataka
+  const handlePotvrdiOcenu = async () => {
+    if (!ulogovaniKorisnik) {
+      setPorukaOcenjivanja("⚠️ Морате бити улоговани!");
+      setTimeout(() => setPorukaOcenjivanja(""), 3000);
+      return;
+    }
+
+    if (izabranaOcena === 0) {
+      setPorukaOcenjivanja("✨ Изаберите оцену (1-5)!");
+      setTimeout(() => setPorukaOcenjivanja(""), 3000);
+      return;
+    }
+
+    const idKorisnika = ulogovaniKorisnik.id || ulogovaniKorisnik.idKorisnika || ulogovaniKorisnik.username;
+
+    const novaOcena = {
+      idAutora: id,
+      idKorisnika: idKorisnika || "anoniman_korisnik",
+      vrednost: Number(izabranaOcena),
+      datum: new Date().toISOString().split('T')[0]
+    };
+
+    try {
+      const oceneRef = ref(db, "ocene");
+      const novaOcenaRef = push(oceneRef);
+      await set(novaOcenaRef, novaOcena);
+
+      setPorukaOcenjivanja("✅ Успешно сте оценили аутора!");
+      setTimeout(() => setPorukaOcenjivanja(""), 3000);
+      
+      fetchAllDetails(); 
+    } catch (error) {
+      console.error("Greška pri upisu ocene u bazu:", error);
+      setPorukaOcenjivanja("❌ Грешка при чувању оцене.");
+      setTimeout(() => setPorukaOcenjivanja(""), 3000);
+    }
+  };
+
+  const formatirajDatum = (izvorniDatum) => {
+    if (!izvorniDatum) return "Непознато";
+    const delovi = izvorniDatum.split("-");
+    if (delovi.length !== 3) return izvorniDatum; 
+    return `${delovi[2]}. ${delovi[1]}. ${delovi[0]}.`;
+  };
+
+  if (loading) {
+    return <p style={{ textAlign: "center", padding: "50px" }}>Учитавање детаља о аутору...</p>;
+  }
+
+  if (!author) {
+    return (
+      <div style={{ textAlign: "center", padding: "50px" }}>
+        <h1>Аутор није пронађен</h1>
+        <Link to="/authors">Назад на листу аутора</Link>
+      </div>
+    );
+  }
+
+  const slikaAutora = author.slike && author.slike[0] ? author.slike[0] : "";
 
   return (
     <div className="author-details-wrapper">
@@ -111,45 +168,65 @@ const AuthorDetails = () => {
         
         <section className="author-split-hero">
           <div className="author-info-main-card">
-            <div className="status-badge-absolute">{author.status}</div>
+            <div className="status-badge-absolute">{author.status || "Активан"}</div>
             <div 
               className="author-image-circle-large"
-              style={{ backgroundImage: `url(${author.image})`}}
+              style={{ backgroundImage: `url(${slikaAutora})` }}
             ></div>
             <div className="author-text-meta">
               <span className="subtitle-gold">КЊИЖЕВНИ ВЕЛИКАН</span>
-              <h1>{author.name} <br/> {author.surname}</h1>
-              <p className="birth-info">📅 Рођен: <strong>{author.birthDate}</strong></p>
+              <h1>{author.ime} <br/> {author.prezime}</h1>
+              <p className="birth-info">📅 Рођен(а): <strong>{formatirajDatum(author.datumRodjenja)}</strong></p>
             </div>
           </div>
 
           <div className="author-rating-card-isolated">
             <h3>Оцените аутора</h3>
+            
             <div className="interactive-stars-box">
-              <span className="star-large">★</span>
-              <span className="star-large">★</span>
-              <span className="star-large">★</span>
-              <span className="star-large">★</span>
-              <span className="star-large">★</span>
+              {[1, 2, 3, 4, 5].map((zvezdica) => (
+                <span 
+                  key={zvezdica}
+                  className={`star-large ${zvezdica <= (hoverOcena || izabranaOcena) ? "active-star" : ""}`}
+                  onClick={() => setIzabranaOcena(zvezdica)}
+                  onMouseEnter={() => setHoverOcena(zvezdica)}
+                  onMouseLeave={() => setHoverOcena(0)}
+                  style={{ cursor: "pointer" }}
+                >
+                  ★
+                </span>
+              ))}
             </div>
-            <button className="confirm-rating-btn">ПОТВРДИ ОЦЕНУ</button>
+
+            <button className="confirm-rating-btn" onClick={handlePotvrdiOcenu}>
+              ПОТВРДИ ОЦЕНУ
+            </button>
+
+            {porukaOcenjivanja && (
+              <div className="rating-status-message">
+                {porukaOcenjivanja}
+              </div>
+            )}
+            
             <div className="current-avg-display">
-              Просечна оцена: <strong>{author.averageRating}</strong>
+              Просечна оцена: <strong>{prosecnaOcena}</strong>
             </div>
           </div>
         </section>
 
         <section className="author-stats-banner-modern">
           <div className="stat-unit">
-            <span className="unit-val">{author.awards}</span>
+            <span className="unit-val">{author.brojOsvojenihNagrada || 0}</span>
             <span className="unit-label">Награда</span>
           </div>
           <div className="stat-unit">
-            <span className="unit-val">{author.soldCopies}</span>
+            <span className="unit-val">
+              {author.brojProdatihPrimeraka ? author.brojProdatihPrimeraka.toLocaleString() : 0}
+            </span>
             <span className="unit-label">Продато примерака</span>
           </div>
           <div className="stat-unit">
-            <span className="unit-val">{author.books.length}</span>
+            <span className="unit-val">{authorBooks.length}</span>
             <span className="unit-label">Написаних књига</span>
           </div>
         </section>
@@ -157,19 +234,25 @@ const AuthorDetails = () => {
         <div className="details-content-grid">
           <div className="bio-container-card">
             <h2 className="classic-title">Биографија</h2>
-            <p className="bio-text-justify">{author.bio}</p>
+            <p className="bio-text-justify">{author.biografija || "Нема унете биографије."}</p>
           </div>
 
           <div className="books-list-container">
             <div className="books-card-side">
               <h2 className="classic-title">Листа свих књига</h2>
-              <div className="books-scroll-area">
-                {author.books.map((book) => (
-                  <Link key={book.id} to={`/book/${book.id}`} className="author-book-link">
-                    <span className="book-icon-bullet" style={{marginRight: '15px'}}>📖</span>
-                    <span className="book-title-text">{book.title}</span>
-                  </Link>
-                ))}
+              {/* Dodali smo inline stil za maksimalnu visinu i skrol da prati biografiju */}
+              <div className="books-scroll-area" style={{ maxHeight: "320px", overflowY: "auto", paddingRight: "10px" }}>
+                {authorBooks.length > 0 ? (
+                  authorBooks.map((book) => (
+                    <Link key={book.id} to={`/book/${book.id}`} className="author-book-link">
+                      <span className="book-icon-bullet" style={{marginRight: '15px'}}>📖</span>
+                      {/* ISPRAVLJENO: book.naziv pokriva ključ iz vaše Firebase baze podataka */}
+                      <span className="book-title-text">{book.naziv || book.naslov}</span>
+                    </Link>
+                  ))
+                ) : (
+                  <p>Нема пронађених књига за овог аутора.</p>
+                )}
               </div>
             </div>
           </div>
@@ -178,16 +261,16 @@ const AuthorDetails = () => {
         <section className="author-quote-break">
           <div className="quote-content">
             <span className="quote-icon">“</span>
-            <p>{author.mainQuote}</p>
+            <p>Књиге су огледало душе, а писана реč живи вечно, преносећи мудрост кроз векове.</p>
           </div>
         </section>
 
         <section className="author-gallery">
           <h2 className="classic-title">Галерија слика</h2>
           <div className="gallery-grid-modern">
-            <div className="gallery-img-box" style={{ backgroundImage: `url(${author.image})` }}></div>
-            <div className="gallery-img-box" style={{ opacity: 0.6 }}></div>
-            <div className="gallery-img-box" style={{ opacity: 0.6 }}></div>
+            <div className="gallery-img-box" style={{ backgroundImage: `url(${author.slike?.[0] || ''})` }}></div>
+            <div className="gallery-img-box" style={{ backgroundImage: `url(${author.slike?.[1] || author.slike?.[0] || ''})`, opacity: author.slike?.[1] ? 1 : 0.4 }}></div>
+            <div className="gallery-img-box" style={{ backgroundImage: `url(${author.slike?.[2] || author.slike?.[0] || ''})`, opacity: author.slike?.[2] ? 1 : 0.4 }}></div>
           </div>
         </section>
       </div>

@@ -1,32 +1,70 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './AuthorList.css';
 import HeroAuthors from './HeroAuthors';
 import SearchAuthors from './SearchAuthors';
 import FeaturedAuthor from './FeaturedAuthor';
 import AuthorStats from './AuthorStats';
 import { Link } from 'react-router-dom';
-import img1 from "../assets/mesa_selimovic.jpg";
-import img2 from "../assets/ivo_andric.jpg";
-import img3 from "../assets/nenad_gugl.jpg";
-import img4 from "../assets/milos_crnjanski.jpg";
-import img5 from "../assets/desanka_maksimovic.jpg";
-import img6 from "../assets/borislav_pekic.jpg";
-
-const authorsData = [
-  { id: 1, name: "Меша Селимовић", info: "12 Рецензија", bookCount: "5 Књига", books: "Тврђава, Дервиш и смрт", image: img1 },
-  { id: 2, name: "Иво Андрић", info: "24 Рецензије", bookCount: "8 Књига", books: "На Дрини ћуприја, Проклета авлија", image: img2 },
-  { id: 3, name: "Ненад Гугл", info: "8 Рецензија", bookCount: "3 Књиге", books: "Умро сам у петак, Велелепота секунде", image: img3 },
-  { id: 4, name: "Милош Црњански", info: "15 Рецензија", bookCount: "6 Књига", books: "Сеобе, Роман о Лондону", image: img4 },
-  { id: 5, name: "Десанка Максимовић", info: "40 Рецензија", bookCount: "12 Књига", books: "Тражим помиловање", image: img5 },
-  { id: 6, name: "Борислав Пекић", info: "18 Рецензија", bookCount: "7 Књига", books: "Беснило, Златно руно", image: img6 }
-];
+import { ref, get } from "firebase/database"; 
+import { db } from "../firebase"; 
 
 function AuthorList() {
-  
+  const [authors, setAuthors] = useState([]); 
+  const [books, setBooks] = useState({}); 
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchAuthorsAndBooks = async () => {
+      try {
+        const authorsSnapshot = await get(ref(db, "autori"));
+        const booksSnapshot = await get(ref(db, "knjige"));
+
+        if (booksSnapshot.exists()) {
+          setBooks(booksSnapshot.val());
+        }
+
+        if (authorsSnapshot.exists()) {
+          const authorsDataFromDB = authorsSnapshot.val();
+
+          const authorsArray = Object.keys(authorsDataFromDB).map((key) => ({
+            id: key, 
+            ...authorsDataFromDB[key]
+          }));
+
+          setAuthors(authorsArray);
+        } else {
+          setAuthors([]);
+        }
+      } catch (error) {
+        console.log("Greška pri učitavanju podataka iz baze:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAuthorsAndBooks();
+  }, []);
+
+  // Помоћна функција која претвара ГГГГ-ММ-ДД у ДД. ММ. ГГГГ.
+  const formatirajDatum = (izvorniDatum) => {
+    if (!izvorniDatum) return "Непознато";
+    
+    // Делимо стринг тамо где су цртице (нпр. "1749-08-28" постаје ["1749", "08", "28"])
+    const delovi = izvorniDatum.split("-");
+    
+    // Ако датум није у добром формату, враћамо га онако како јесте
+    if (delovi.length !== 3) return izvorniDatum; 
+    
+    // Спајамо их у редослед: дан. месец. година.
+    return `${delovi[2]}.${delovi[1]}.${delovi[0]}.`;
+  };
+
+  if (loading) {
+    return <p style={{ textAlign: "center", padding: "50px" }}>Учитавање аутора...</p>;
+  }
+
   return (
-
     <section className="authors-page">
-
       <HeroAuthors />
 
       <FeaturedAuthor />
@@ -37,40 +75,53 @@ function AuthorList() {
 
       <div className="authors-grid-container">
         <div className="authors-grid">
-          {authorsData.map(author => (
-            <div key={author.id} className="author-card-modern">
+          {authors.map(author => {
+            // Бројање књига из базе
+            const sveKnjigeIzBaze = Object.values(books);
+            const brojKnjigaOvogAutora = sveKnjigeIzBaze.filter(
+              (book) => book.idAutora === author.id
+            ).length;
 
-              <div className="book-count-badge">
-                {author.bookCount}
-              </div>
+            // Извлачење прве слике
+            const slikaAutora = author.slike && author.slike[0] ? author.slike[0] : "";
 
-              <div className="author-avatar-container">
-                <div 
-                className="author-image-circle" 
-                style={{ backgroundImage: `url(${author.image})` }}
-                ></div>
-              </div>
+            return (
+              <div key={author.id} className="author-card-modern">
 
-              <div className="author-content-modern">
-                <h3>{author.name}</h3>
-                <p className="author-meta">Најпознатија дела: <i>{author.books}</i></p>
-                <hr className="card-separator" />
-
-                <div className="author-stats-row">
-                  <span className="stat-label">Активност:</span>
-                  <span className="stat-value">{author.info}</span>
+                <div className="book-count-badge">
+                  {brojKnjigaOvogAutora} књига
                 </div>
 
-                <Link to={`/author/${author.id}`} className="author-btn">
-                  Види профил
-                </Link>
-              </div>
+                <div className="author-avatar-container">
+                  <div 
+                    className="author-image-circle" 
+                    style={{ backgroundImage: `url(${slikaAutora})` }}
+                  ></div>
+                </div>
 
-            </div>
-          ))}
+                <div className="author-content-modern">
+                  <h3>{author.ime} {author.prezime}</h3>
+                  
+                  {/* Прослеђујемо датум из базе кроз нашу функцију за лепши формат */}
+                  <p className="author-meta">Рођен(а): <i>{formatirajDatum(author.datumRodjenja)}</i></p>
+                  
+                  <hr className="card-separator" />
+
+                  <div className="author-stats-row">
+                    <span className="stat-label">Активност:</span>
+                    <span className="stat-value">{author.status || "Активан"}</span>
+                  </div>
+
+                  <Link to={`/author/${author.id}`} className="author-btn">
+                    Види профил
+                  </Link>
+                </div>
+
+              </div>
+            );
+          })}
         </div>
       </div>
-
     </section>
   );
 }

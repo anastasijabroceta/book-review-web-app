@@ -12,8 +12,8 @@ const BookDetails = () => {
 
   const [book, setBook] = useState(null);
   const [authorName, setAuthorName] = useState("");
-const [reviews, setReviews] = useState([]);
-const [popupMessage, setPopupMessage] = useState("");
+  const [reviews, setReviews] = useState([]);
+  const [popupMessage, setPopupMessage] = useState("");
 
   const [newReview, setNewReview] = useState("");
 

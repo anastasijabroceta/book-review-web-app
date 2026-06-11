@@ -231,7 +231,7 @@ const AllBooks = () => {
                       Детаљи
                     </Link>
 
-                    <button className="secondary-book-btn">Рецензије</button>
+                    
                   </div>
                 </div>
               </article>

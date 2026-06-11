@@ -218,8 +218,7 @@
   line-height: 1.6;
 }
 
-.review-item a,
-.rating-item a {
+.review-item a {
   color: #b47b2c;
   font-weight: 800;
   text-decoration: none;
@@ -231,10 +230,6 @@
   align-items: center;
 }
 
-.rating-item span {
-  color: #b47b2c;
-  font-size: 20px;
-}
 .logout-button{
   border: none;
   border-radius: 999px;

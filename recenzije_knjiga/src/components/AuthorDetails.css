@@ -118,6 +118,7 @@
   color: #c19a6b; 
   font-size: 32px; 
   margin: 0 2px; 
+  cursor: pointer;
 }
 
 .confirm-rating-btn {
@@ -198,6 +199,16 @@
   font-family: "Merriweather", serif;
 }
 
+.books-scroll-area {
+  max-height: 320px; 
+  overflow-y: auto; 
+  padding-right: 10px;
+}
+
+.book-icon-bullet {
+  margin-right: 15px;
+}
+
 .bio-text-justify {
   line-height: 2;
   color: #4e342e;
@@ -267,19 +278,112 @@
 }
 
 .star-large.active-star {
-  color: #ffb400; /* Prelepa zlatna boja za aktivne zvezdice */
+  color: #ffb400; 
 }
 
 .rating-status-message {
   margin-top: 10px;
   font-size: 14px;
   font-weight: 600;
-  color: #ffb400; /* Prelepa zlatna boja koja se slaže sa zvezdicama i vašom temom */
+  color: #ffb400; 
   text-align: center;
   animation: fadeIn 0.3s ease-in-out;
 }
 
+.loading-text { text-align: center; padding: 50px; }
+
+.not-found-wrapper { text-align: center; padding: 50px; }
+
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(-5px); }
   to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 1024px) {
+  .author-details-page {
+    padding: 80px 30px 60px;
+  }
+
+  .author-split-hero {
+    grid-template-columns: 1fr;
+    margin-top: 60px;
+  }
+
+  .author-stats-banner-modern {
+    gap: 20px;
+    padding: 30px;
+  }
+
+  .details-content-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .gallery-grid-modern {
+    grid-template-columns: 1fr 1fr;
+    height: auto;
+    gap: 16px;
+  }
+
+  .gallery-img-box {
+    height: 200px;
+  }
+}
+
+@media (max-width: 768px) {
+  .author-details-page {
+    padding: 60px 16px 40px;
+  }
+
+  .author-info-main-card {
+    flex-direction: column;
+    text-align: center;
+    padding: 40px 24px;
+    gap: 24px;
+  }
+
+  .author-image-circle-large {
+    width: 160px;
+    height: 160px;
+  }
+
+  .author-text-meta h1 {
+    font-size: 38px;
+  }
+
+  .author-stats-banner-modern {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    padding: 24px;
+  }
+
+  .unit-val {
+    font-size: 32px;
+  }
+
+  .bio-container-card,
+  .books-card-side {
+    padding: 28px 20px;
+  }
+
+  .author-quote-break {
+    padding: 40px 24px;
+  }
+
+  .author-quote-break p {
+    font-size: 20px;
+  }
+
+  .gallery-grid-modern {
+    grid-template-columns: 1fr;
+    height: auto;
+  }
+
+  .gallery-img-box {
+    height: 220px;
+  }
+
+  .author-split-hero {
+    margin-top: 40px;
+    gap: 24px;
+  }
 }

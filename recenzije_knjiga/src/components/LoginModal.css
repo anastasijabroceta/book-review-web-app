@@ -154,21 +154,7 @@
     font-size: 14px;
   }
 }
-@media (max-width: 480px) {
-  .login-modal-overlay {
-    padding: 12px;
-  }
 
-   .login-modal-box {
-    width: 300px;
-    max-width: calc(100vw - 24px);
-    padding: 20px 14px;
-  }
-
-  .login-modal-box h2 {
-    font-size: 24px;
-  }
-}
 .custom-error-popup {
   background: #ffe5e5;
   color: #a10000;

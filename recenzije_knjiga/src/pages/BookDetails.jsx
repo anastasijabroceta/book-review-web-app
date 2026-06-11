@@ -1,11 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import "./BookDetails.css";
 import { ref, get, set } from "firebase/database";
 import { db } from "../firebase";
-import { useEffect } from "react";
 import VintagePhoto from "../assets/vintage_photo.png";
-
 
 const BookDetails = () => {
   const { id } = useParams();
@@ -185,9 +183,9 @@ const BookDetails = () => {
 
             <h1 className="book-main-title">{book.naziv}</h1>
 
-           <Link className="book-author-link">
-  {authorName}
-</Link>
+            <Link to={`/author/${book.idAutora}`} className="book-author-link">
+              {authorName}
+            </Link>
 
             <div className="book-divider"></div>
 

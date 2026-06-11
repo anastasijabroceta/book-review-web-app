@@ -29,17 +29,19 @@ const RegisterModal = ({ isOpen, onClose }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-if (!emailRegex.test(email)) {
-  alert("Унесите исправан email.");
-  return;
-}
+  const [errorMessage, setErrorMessage] = useState("");
 
-if (lozinka.length < 6) {
-  alert("Лозинка мора имати најмање 6 карактера.");
-  return;
-}
+  if (!emailRegex.test(email)) {
+    setErrorMessage("Унесите исправан email.");
+    return;
+  }
+
+  if (lozinka.length < 6) {
+    setErrorMessage("Лозинка мора имати најмање 6 карактера.");
+    return;
+  }
 
     try {
       const snapshot = await get(ref(db, "korisnici"));
@@ -56,12 +58,12 @@ if (lozinka.length < 6) {
       );
 
       if (emailPostoji) {
-        alert("Корисник са овим email-ом већ постоји.");
+        setErrorMessage("Корисник са овим email-ом већ постоји.");
         return;
       }
 
       if (korisnickoImePostoji) {
-        alert("Корисничко име је већ заузето.");
+        setErrorMessage("Корисничко име је већ заузето.");
         return;
       }
 
@@ -84,12 +86,12 @@ if (lozinka.length < 6) {
       localStorage.setItem("ulogovaniKorisnikId", noviId);
       localStorage.setItem("ulogovaniKorisnickoIme", korisnickoIme);
 
-      alert("Успешна регистрација!");
+      setErrorMessage("Успешна регистрација!");
       onClose();
       window.location.reload();
     } catch (error) {
       console.log("Грешка при регистрацији:", error);
-      alert("Дошло је до грешке при регистрацији.");
+      setErrorMessage("Дошло је до грешке при регистрацији.");
     }
   };
 
@@ -97,6 +99,13 @@ if (lozinka.length < 6) {
     <div className="login-modal-overlay" onClick={onClose}>
       <div className="login-modal-box" onClick={(e) => e.stopPropagation()}>
         <h2>Регистрација</h2>
+
+        {errorMessage && (
+          <div className="custom-error-popup">
+            <span>{errorMessage}</span>
+            <button type="button" onClick={() => setErrorMessage("")}>✕</button>
+          </div>
+        )}
 
         <form onSubmit={handleSubmit}>
           <input

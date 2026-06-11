@@ -7,26 +7,21 @@ import { db } from "../firebase";
 const AuthorDetails = () => {
   const { id } = useParams(); 
   const [author, setAuthor] = useState(null);
-  const [authorBooks, setAuthorBooks] = useState([]); // Držaćemo knjige ovog autora
+  const [authorBooks, setAuthorBooks] = useState([]); 
   const [loading, setLoading] = useState(true);
 
-  // --- STATE-OVI ZA OCENE I STATUS ---
   const [prosecnaOcena, setProsecnaOcena] = useState("0.0");
-  const [izabranaOcena, setIzabranaOcena] = useState(0); // Ocena koju korisnik klikne (1-5)
-  const [hoverOcena, setHoverOcena] = useState(0); // Za efekat prelaza mišem preko zvezdica
+  const [izabranaOcena, setIzabranaOcena] = useState(0); 
+  const [hoverOcena, setHoverOcena] = useState(0); 
   const [ulogovaniKorisnik, setUlogovaniKorisnik] = useState(null);
-  const [porukaOcenjivanja, setPorukaOcenjivanja] = useState(""); // Za elegantan ispis poruke
+  const [porukaOcenjivanja, setPorukaOcenjivanja] = useState(""); 
 
-  // Funkcija koja povlači sve podatke i računa prosek ocena
   const fetchAllDetails = async () => {
     try {
-      // 1. Povlačimo podatke o konkretnom autoru
       const authorSnapshot = await get(ref(db, `autori/${id}`));
       
-      // 2. Povlačimo sve knjige iz baze radi relacije
       const booksSnapshot = await get(ref(db, "knjige"));
 
-      // 3. Povlačimo sve ocene iz baze
       const ratingsSnapshot = await get(ref(db, "ocene"));
 
       if (authorSnapshot.exists()) {
@@ -39,10 +34,8 @@ const AuthorDetails = () => {
       if (booksSnapshot.exists() && authorSnapshot.exists()) {
         const allBooks = booksSnapshot.val();
         
-        // Pomoćna logika: Čistimo ID autora tako da ostanu samo cifre (npr. "aut001" postaje "1")
         const cistIdAutora = id.replace(/\D/g, ""); 
 
-        // Filtriramo knjige: pokrivamo situaciju ako je idAutora sa "aut" ili samo čist broj
         const filteredBooks = Object.keys(allBooks)
           .map(key => ({ id: key, ...allBooks[key] }))
           .filter(book => {
@@ -54,7 +47,6 @@ const AuthorDetails = () => {
         setAuthorBooks(filteredBooks);
       }
 
-      // 4. Dinamičko računanje prosečne ocene
       if (ratingsSnapshot.exists()) {
         const allRatings = ratingsSnapshot.val();
         const cistIdAutora = id.replace(/\D/g, "");
@@ -85,13 +77,11 @@ const AuthorDetails = () => {
 
   useEffect(() => {
     const proveriLogin = () => {
-      const ulogovan = localStorage.getItem("ulogovaniKorisnik") || localStorage.getItem("user") || localStorage.getItem("korisnik");
-      if (ulogovan) {
-        try {
-          setUlogovaniKorisnik(JSON.parse(ulogovan));
-        } catch (e) {
-          setUlogovaniKorisnik(null);
-        }
+      const korisnikId = localStorage.getItem("ulogovaniKorisnikId");
+      if (korisnikId) {
+        setUlogovaniKorisnik({ id: korisnikId });
+      } else {
+        setUlogovaniKorisnik(null);
       }
     };
 
@@ -101,7 +91,6 @@ const AuthorDetails = () => {
     }
   }, [id]);
 
-  // Funkcija za slanje nove ocene u bazu podataka
   const handlePotvrdiOcenu = async () => {
     if (!ulogovaniKorisnik) {
       setPorukaOcenjivanja("⚠️ Морате бити улоговани!");
@@ -115,7 +104,7 @@ const AuthorDetails = () => {
       return;
     }
 
-    const idKorisnika = ulogovaniKorisnik.id || ulogovaniKorisnik.idKorisnika || ulogovaniKorisnik.username;
+    const idKorisnika = ulogovaniKorisnik.id;
 
     const novaOcena = {
       idAutora: id,
@@ -148,12 +137,12 @@ const AuthorDetails = () => {
   };
 
   if (loading) {
-    return <p style={{ textAlign: "center", padding: "50px" }}>Учитавање детаља о аутору...</p>;
+    return <p className="loading-text">Учитавање детаља о аутору...</p>;
   }
 
   if (!author) {
     return (
-      <div style={{ textAlign: "center", padding: "50px" }}>
+      <div className="not-found-wrapper">
         <h1>Аутор није пронађен</h1>
         <Link to="/authors">Назад на листу аутора</Link>
       </div>
@@ -191,7 +180,6 @@ const AuthorDetails = () => {
                   onClick={() => setIzabranaOcena(zvezdica)}
                   onMouseEnter={() => setHoverOcena(zvezdica)}
                   onMouseLeave={() => setHoverOcena(0)}
-                  style={{ cursor: "pointer" }}
                 >
                   ★
                 </span>
@@ -240,13 +228,11 @@ const AuthorDetails = () => {
           <div className="books-list-container">
             <div className="books-card-side">
               <h2 className="classic-title">Листа свих књига</h2>
-              {/* Dodali smo inline stil za maksimalnu visinu i skrol da prati biografiju */}
-              <div className="books-scroll-area" style={{ maxHeight: "320px", overflowY: "auto", paddingRight: "10px" }}>
+              <div className="books-scroll-area">
                 {authorBooks.length > 0 ? (
                   authorBooks.map((book) => (
                     <Link key={book.id} to={`/book/${book.id}`} className="author-book-link">
-                      <span className="book-icon-bullet" style={{marginRight: '15px'}}>📖</span>
-                      {/* ISPRAVLJENO: book.naziv pokriva ključ iz vaše Firebase baze podataka */}
+                      <span className="book-icon-bullet">📖</span>
                       <span className="book-title-text">{book.naziv || book.naslov}</span>
                     </Link>
                   ))
@@ -261,7 +247,7 @@ const AuthorDetails = () => {
         <section className="author-quote-break">
           <div className="quote-content">
             <span className="quote-icon">“</span>
-            <p>Књиге су огледало душе, а писана реč живи вечно, преносећи мудрост кроз векове.</p>
+            <p>Књиге су огледало душе, а писана реч живи вечно, преносећи мудрост кроз векове.</p>
           </div>
         </section>
 

@@ -1,0 +1,30 @@
+.rating-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid #eee1d2;
+}
+
+.rating-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.rating-author-link {
+  color: #4f3929;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.rating-date {
+  font-size: 12px;
+  color: #a08c7c;
+}
+
+.rating-stars {
+  color: #ffb400;
+  letter-spacing: 2px;
+  font-size: 18px;
+}

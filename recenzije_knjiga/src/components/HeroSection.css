@@ -94,3 +94,21 @@
     font-size: 17px;
   }
 }
+
+@media (max-width: 480px) {
+  .hero-title {
+    font-size: 32px;
+  }
+
+  .hero-subtitle {
+    font-size: 14px;
+  }
+
+  .hero-text {
+    font-size: 15px;
+  }
+
+  .hero-section {
+    background-attachment: scroll;
+  }
+}

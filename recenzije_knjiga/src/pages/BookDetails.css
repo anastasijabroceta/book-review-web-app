@@ -202,7 +202,6 @@
 }
 
 /* REVIEW SECTION */
-/* REVIEW SECTION */
 .review-section-card {
    position: relative;
   padding: 28px;
@@ -299,91 +298,6 @@ position: relative;
 
 /* REVIEWS */
 .reviews-heading {
-  margin-bottom: 20px;
-  font-family: "Merriweather", serif;
-  font-size: 34px;
-  color: #4f3929;
-}
-
-.single-review-card {
-  display: grid;
-  grid-template-columns: 54px 1fr;
-  gap: 16px;
-  align-items: start;
-  padding: 18px;
-  border-radius: 18px;
-  background: #fff;
-  border: 1px solid #e9dccd;
-  box-shadow: 0 10px 24px rgba(91, 64, 39, 0.05);
-  margin-bottom: 14px;
-  margin-top: 30px;
-}
-
-.review-avatar {
-  width: 54px;
-  height: 54px;
-  border-radius: 50%;
-  display: grid;
-  place-items: center;
-  background: #efe2d0;
-  color: #9f6b24;
-  font-weight: 700;
-  font-size: 18px;
-}
-
-.review-top-line {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 8px;
-}
-
-.review-top-line strong {
-  color: #4f3929;
-  font-size: 17px;
-}
-
-.review-stars {
-  color: #d8a84e;
-  letter-spacing: 2px;
-  font-size: 15px;
-}
-
-.review-content p {
-  margin: 0;
-  color: #6d5847;
-  line-height: 1.75;
-  font-size: 15px;
-}
-
-/* RESPONSIVE */
-@media (max-width: 768px) {
-  .review-section-card {
-    padding: 20px;
-    border-radius: 22px;
-  }
-
-  .review-section-title,
-  .reviews-heading {
-    font-size: 30px;
-  }
-
-  .review-form-shell {
-    min-height: auto;
-  }
-
-  .review-section-image {
-    width: 120px;
-    max-width: 30%;
-    right: 12px;
-    bottom: 12px;
-    
-  }
-}
-
-/* REVIEWS */
-.reviews-heading {
   margin: 0 0 16px;
   font-family: "Merriweather", serif;
   font-size: 34px;
@@ -453,6 +367,31 @@ position: relative;
 
   .book-meta-grid {
     grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .review-section-card {
+    padding: 20px;
+    border-radius: 22px;
+  }
+
+  .review-section-title,
+  .reviews-heading {
+    font-size: 30px;
+  }
+
+  .review-form-shell {
+    min-height: auto;
+  }
+
+  .review-section-image {
+    width: 120px;
+    max-width: 30%;
+    right: 12px;
+    bottom: 12px;
+    
   }
 }
 

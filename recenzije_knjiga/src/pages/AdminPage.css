@@ -97,3 +97,43 @@
   font-style: italic;
   margin-bottom: 40px;
 }
+
+@media (max-width: 768px) {
+  .admin-hero-banner {
+    height: 45vh;
+    background-attachment: scroll; 
+  }
+
+  .admin-main-title-text {
+    font-size: 36px;
+  }
+
+  .admin-subtitle-text {
+    font-size: 14px;
+  }
+
+  .admin-tabs-box {
+    flex-direction: column;
+    border-radius: 20px;
+    gap: 6px;
+  }
+
+  .admin-tab-btn {
+    padding: 12px 24px;
+    font-size: 14px;
+  }
+
+  .admin-main-content {
+    padding: 0 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .admin-main-title-text {
+    font-size: 28px;
+  }
+
+  .admin-tabs-box {
+    width: 92%;
+  }
+}

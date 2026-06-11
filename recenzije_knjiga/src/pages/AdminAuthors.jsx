@@ -6,7 +6,7 @@ import { db } from "../firebase";
 const emptyForm = {
   ime: "", 
   prezime: "", 
-  status: "Активан", // Podrazumevana vrednost za padajući meni
+  status: "Активан", 
   datumRodjenja: "", 
   brojOsvojenihNagrada: "", 
   brojProdatihPrimeraka: "", 
@@ -56,42 +56,35 @@ const AdminAuthors = () => {
     }));
   };
 
-  // Validacija telefona menadžera iz specifikacije
   const validatePhone = (phone) => {
-    const phoneRegex = /^\+381\s\d{2}\s\d{3,4}-\d{3}$/;
+    const phoneRegex = /^\+381 \d{2} \d{2,3}-\d{4}$/;
     return phoneRegex.test(phone);
   };
 
-  // Validacija za ćirilicu i veliko početno slovo
   const validateCyrillicName = (name) => {
-    // Dozvoljava samo jedno veliko ćirilično slovo na početku i mala ćirilična slova u nastavku
-    const cyrillicRegex = /^[А-Ш][а-шђјљљњћџћ]+$/;
+    const cyrillicRegex = /^[А-ШЂЈЉЊЋЏа-шђјљњћџ][а-шђјљњћџА-ШЂЈЉЊЋЏа-шђјљњћџ\s-]+$/;
     return cyrillicRegex.test(name);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // 1. Validacija imena (Samo ćirilica i veliko početno slovo)
     if (!validateCyrillicName(formData.ime.trim())) {
       setError("Име мора бити написано ћирилицом, почети великим словом и садржати само слова.");
       return;
     }
 
-    // 2. Validacija prezimena (Samo ćirilica i veliko početno slovo)
     if (!validateCyrillicName(formData.prezime.trim())) {
       setError("Презиме мора бити написано ћирилицом, почети великим словом и садржати само слова.");
       return;
     }
 
-    // 3. RegEx Validacija datuma (format GGGG-MM-DD)
     const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
     if (!dateRegex.test(formData.datumRodjenja)) {
       setError("Датум рођења мора бити у формату ГГГГ-ММ-ДД (нпр. 1950-05-25).");
       return;
     }
 
-    // 4. Validacija brojčanih polja (da nisu negativni)
     if (Number(formData.brojOsvojenihNagrada) < 0) {
       setError("Број освојених награда не може бити негативан број.");
       return;
@@ -101,13 +94,11 @@ const AdminAuthors = () => {
       return;
     }
 
-    // 5. RegEx Validacija telefona menadžera
     if (formData.kontaktTelefonMenadzera && !validatePhone(formData.kontaktTelefonMenadzera)) {
       setError("Формат телефона мора бити: +381 XX XXX-XXXX (нпр. +381 64 123-4567).");
       return;
     }
 
-    // 6. Validacija biografije (da nije prazna ili samo razmaci)
     if (!formData.biografija.trim()) {
       setError("Биографија аутора је обавезна.");
       return;
@@ -179,7 +170,7 @@ const AdminAuthors = () => {
   };
 
   if (loading) {
-    return <p style={{ textAlign: "center", padding: "50px" }}>Учитавање административног панела...</p>;
+    return <p className="loading-text">Учитавање административног панела...</p>;
   }
 
   return (
@@ -208,7 +199,6 @@ const AdminAuthors = () => {
                   required 
                 />
                 
-                {/* ISPRAVLJENO: Padajući meni umesto običnog input polja */}
                 <select 
                   name="status"
                   value={formData.status} 
@@ -216,6 +206,7 @@ const AdminAuthors = () => {
                   required
                 >
                   <option value="Активан">Активан</option>
+                  <option value="У пензији">У пензији</option>
                   <option value="Преминуо">Преминуо</option>
                 </select>
 
@@ -258,15 +249,12 @@ const AdminAuthors = () => {
                   value={formData.slike} 
                   onChange={handleChange} 
                 />
-              </div>
-
-              <div style={{ marginTop: "15px" }}>
+              
                 <textarea 
                   name="biografija"
                   placeholder="Биографија аутора..." 
                   value={formData.biografija} 
                   onChange={handleChange}
-                  style={{ width: "100%", minHeight: "100px", padding: "10px", borderRadius: "8px", border: "1px solid #ccc", fontFamily: "inherit" }}
                   required
                 />
               </div>

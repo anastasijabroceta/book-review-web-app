@@ -83,3 +83,29 @@
 .search-btn-action:hover {
   background: #3a2822;
 }
+
+@media (max-width: 768px) {
+  .search-tool-section {
+    padding: 60px 16px;
+  }
+
+  .section-title {
+    font-size: 32px;
+    margin-bottom: 40px;
+  }
+
+  .search-container {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .search-width-control {
+    padding: 20px 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .section-title {
+    font-size: 26px;
+  }
+}

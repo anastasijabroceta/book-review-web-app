@@ -48,3 +48,24 @@
   font-family: "Merriweather", serif;
   width: 100%;
 }
+
+@media (max-width: 768px) {
+  .authors-hero {
+    height: 55vh;
+    background-attachment: scroll; 
+  }
+
+  .authors-main-title {
+    font-size: 36px;
+  }
+
+  .authors-subtitle {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .authors-main-title {
+    font-size: 28px;
+  }
+}

@@ -50,39 +50,6 @@
   font-size: 14px;
 }
 
-.side-menu {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-}
-
-.side-menu a {
-  text-decoration: none;
-  background: #eadfce;
-  color: #4f3929;
-  padding: 12px 14px;
-  border-radius: 8px;
-  font-weight: 800;
-  transition: 0.25s ease;
-}
-
-.side-menu a:hover {
-  background: #c7a06d;
-  color: white;
-  transform: translateX(6px);
-}
-
-.side-logout-btn {
-  margin-top: auto;
-  border: none;
-  background: #c85c55;
-  color: white;
-  padding: 12px;
-  border-radius: 8px;
-  font-weight: 800;
-  cursor: pointer;
-}
-
 .profile-main {
   padding: 46px 54px;
 }
@@ -161,40 +128,6 @@
   border-radius: 18px;
   padding: 20px;
   border: 2px solid #eadfce;
-}
-
-.review-item,
-.rating-item {
-  background: white;
-  padding: 15px;
-  border-radius: 14px;
-  margin-bottom: 12px;
-  box-shadow: 0 8px 18px rgba(79, 57, 41, 0.07);
-}
-
-.review-item p {
-  margin: 0 0 10px;
-  color: #5f4632;
-  font-style: italic;
-  line-height: 1.5;
-}
-
-.review-item a,
-.rating-item a {
-  color: #b47b2c;
-  font-weight: 800;
-  text-decoration: none;
-}
-
-.rating-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.rating-item span {
-  color: #b47b2c;
-  white-space: nowrap;
 }
 
 @media (max-width: 900px) {
@@ -387,5 +320,28 @@
   .my-review-book-img {
     width: 100%;
     height: 320px;
+  }
+}
+
+@media (max-width: 480px) {
+  .profile-page {
+    padding: 100px 12px 40px;
+  }
+
+  .profile-main {
+    padding: 20px 14px;
+  }
+
+  .profile-heading h1 {
+    font-size: 26px;
+  }
+
+  .profile-info-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .side-avatar {
+    width: 60px;
+    height: 60px;
   }
 }

@@ -12,6 +12,7 @@ const RegisterModal = ({ isOpen, onClose }) => {
   const [zanimanje, setZanimanje] = useState("");
   const [korisnickoIme, setKorisnickoIme] = useState("");
   const [lozinka, setLozinka] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
     if (isOpen) {
@@ -29,19 +30,17 @@ const RegisterModal = ({ isOpen, onClose }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-  const [errorMessage, setErrorMessage] = useState("");
+    if (!emailRegex.test(email)) {
+      setErrorMessage("Унесите исправан email.");
+      return;
+    }
 
-  if (!emailRegex.test(email)) {
-    setErrorMessage("Унесите исправан email.");
-    return;
-  }
-
-  if (lozinka.length < 6) {
-    setErrorMessage("Лозинка мора имати најмање 6 карактера.");
-    return;
-  }
+    if (lozinka.length < 6) {
+      setErrorMessage("Лозинка мора имати најмање 6 карактера.");
+      return;
+    }
 
     try {
       const snapshot = await get(ref(db, "korisnici"));

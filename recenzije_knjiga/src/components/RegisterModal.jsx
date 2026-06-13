@@ -31,16 +31,17 @@ const RegisterModal = ({ isOpen, onClose }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const cirilicaRegex = /^[А-ШЂЈЉЊЋЏЖЧШа-шђјљњћџжчш\s]+$/;
 
     if (!emailRegex.test(email)) {
       setErrorMessage("Унесите исправан email.");
       return;
     }
 
-    if (lozinka.length < 6) {
-      setErrorMessage("Лозинка мора имати најмање 6 карактера.");
-      return;
-    }
+if (lozinka.length < 6) {
+  alert("Лозинка мора имати најмање 6 карактера.");
+  return;
+}
 
     try {
       const snapshot = await get(ref(db, "korisnici"));

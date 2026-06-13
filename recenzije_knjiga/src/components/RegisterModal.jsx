@@ -30,6 +30,7 @@ const RegisterModal = ({ isOpen, onClose }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const cirilicaRegex = /^[А-ШЂЈЉЊЋЏЖЧШа-шђјљњћџжчш\s]+$/;
 
 if (!emailRegex.test(email)) {
   alert("Унесите исправан email.");
@@ -38,6 +39,25 @@ if (!emailRegex.test(email)) {
 
 if (lozinka.length < 6) {
   alert("Лозинка мора имати најмање 6 карактера.");
+  return;
+}
+if (!cirilicaRegex.test(ime)) {
+  alert("Име мора бити написано ћирилицом.");
+  return;
+}
+
+if (!cirilicaRegex.test(prezime)) {
+  alert("Презиме мора бити написано ћирилицом.");
+  return;
+}
+
+if (!cirilicaRegex.test(adresa)) {
+  alert("Адреса мора бити написана ћирилицом.");
+  return;
+}
+
+if (!cirilicaRegex.test(zanimanje)) {
+  alert("Занимање мора бити написано ћирилицом.");
   return;
 }
 

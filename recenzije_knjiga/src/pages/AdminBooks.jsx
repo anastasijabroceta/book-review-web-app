@@ -67,9 +67,23 @@ const AdminBooks = () => {
   };
 
   const validateISBN = (isbn) => {
-    const isbnRegex = /^(97[89])[-]?\d{1,5}[-]?\d{1,7}[-]?\d{1,7}[-]?\d$/;
-    return isbnRegex.test(isbn);
-  };
+  const isbnRegex = /^(97[89])[-]?\d{1,5}[-]?\d{1,7}[-]?\d{1,7}[-]?\d$/;
+  return isbnRegex.test(isbn);
+};
+
+const isCyrillic = (text) => {
+  const cyrillicRegex = /^[А-ШЂЈЉЊЋЏЖЧШа-шђјљњћџжчш0-9\s.,:;!?()„”"'-]+$/;
+  return cyrillicRegex.test(text);
+};
+
+const isValidUrlList = (text) => {
+  if (!text.trim()) return true;
+
+  return text
+    .split(",")
+    .map((url) => url.trim())
+    .every((url) => /^https?:\/\/.+\..+/.test(url));
+};
 
   const generateBookId = () => {
     const numbers = books.map((book) =>
@@ -84,15 +98,50 @@ const AdminBooks = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!validateISBN(formData.isbn)) {
-      setError("ISBN није у исправном формату.");
-      return;
-    }
+   if (!isCyrillic(formData.naziv)) {
+  setError("Назив књиге мора бити написан ћирилицом.");
+  return;
+}
 
-    if (!formData.idAutora) {
-      setError("Морате изабрати аутора.");
-      return;
-    }
+if (!formData.idAutora) {
+  setError("Морате изабрати аутора.");
+  return;
+}
+
+if (!isCyrillic(formData.zanr)) {
+  setError("Жанр мора бити написан ћирилицом.");
+  return;
+}
+
+if (!isCyrillic(formData.format)) {
+  setError("Формат мора бити написан ћирилицом.");
+  return;
+}
+
+if (Number(formData.cena) <= 0) {
+  setError("Цена мора бити већа од нуле.");
+  return;
+}
+
+if (Number(formData.brojStrana) <= 0) {
+  setError("Број страна мора бити већи од нуле.");
+  return;
+}
+
+if (!validateISBN(formData.isbn)) {
+  setError("ISBN није у исправном формату.");
+  return;
+}
+
+if (!isValidUrlList(formData.slike)) {
+  setError("URL слике није у исправном формату.");
+  return;
+}
+
+if (!isCyrillic(formData.opis)) {
+  setError("Опис мора бити написан ћирилицом.");
+  return;
+}
 
     try {
       setError("");

@@ -163,6 +163,7 @@ const BookDetails = () => {
       >
         У реду
       </button>
+      
     </div>
   </div>
 )}
@@ -213,14 +214,7 @@ const BookDetails = () => {
               </div>
             </div>
 
-            <div className="book-rating-panel">
-              <div className="book-rating-left">
-                <span className="rating-label">Оцена</span>
-                <strong>{book.rating} / 5</strong>
-              </div>
-
-              <div className="book-stars">★★★★★</div>
-            </div>
+          
           </div>
         </div>
 

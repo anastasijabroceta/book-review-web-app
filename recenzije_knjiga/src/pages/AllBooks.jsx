@@ -87,7 +87,9 @@ const AllBooks = () => {
       book.naziv?.toLowerCase().includes(search) ||
       book.autorImePrezime?.toLowerCase().includes(search) ||
       book.isbn?.toLowerCase().includes(search) ||
-      book.opis?.toLowerCase().includes(search);
+      book.opis?.toLowerCase().includes(search) ||
+      String(book.brojStrana).includes(search) ||
+      String(book.cena).includes(search);
 
     const matchesGenre =
       selectedGenre === "Сви жанрови" || book.zanr === selectedGenre;
@@ -212,12 +214,12 @@ const AllBooks = () => {
 
                     <div className="meta-box">
                       <span>Цена</span>
-                      <strong>{book.cena}</strong>
+                      <strong>{highlightText(String(book.cena))}</strong>
                     </div>
 
                     <div className="meta-box">
                       <span>Страна</span>
-                      <strong>{book.brojStrana}</strong>
+                      <strong>{highlightText(String(book.brojStrana))}</strong>
                     </div>
 
                     <div className="meta-box">
@@ -230,6 +232,18 @@ const AllBooks = () => {
                     <Link to={`/book/${book.id}`} className="primary-book-btn">
                       Детаљи
                     </Link>
+                    {/*<button
+  type="button"
+  onClick={() =>
+    setBooks(
+      [...books].sort((a, b) =>
+        b.naziv.localeCompare(a.naziv, "sr")
+      )
+    )
+  }
+>
+  Сортирај Ш-А
+</button>*/}
 
                     
                   </div>

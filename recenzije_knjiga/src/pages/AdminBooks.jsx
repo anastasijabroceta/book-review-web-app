@@ -13,6 +13,7 @@ const emptyForm = {
   isbn: "",
   opis: "",
   slike: "",
+
 };
 
 const AdminBooks = () => {
@@ -142,6 +143,7 @@ if (!isCyrillic(formData.opis)) {
   setError("Опис мора бити написан ћирилицом.");
   return;
 }
+
 
     try {
       setError("");
@@ -300,6 +302,7 @@ if (!isCyrillic(formData.opis)) {
                   value={formData.slike}
                   onChange={handleChange}
                 />
+    
 
                 <textarea
                   name="opis"
@@ -309,6 +312,7 @@ if (!isCyrillic(formData.opis)) {
                   required
                 />
               </div>
+              
 
               {error && <p className="form-error">{error}</p>}
 
@@ -375,6 +379,7 @@ if (!isCyrillic(formData.opis)) {
                         >
                           Обриши
                         </button>
+                        
                       </td>
                     </tr>
                   ))}
